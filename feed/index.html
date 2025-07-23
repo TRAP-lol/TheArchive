@@ -256,23 +256,37 @@
             line-height: 1.6;
         }
 
-        .item-link {
-            display: inline-block;
-            margin-top: 15px;
+        .item-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
             color: var(--vibrant-purple);
-            text-decoration: none;
-            font-size: 0.9rem;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
             transition: var(--transition);
-            padding: 5px 10px;
-            border-radius: 5px;
-            background: rgba(179, 136, 255, 0.1);
-        }
-
-        .item-link:hover {
-            background: rgba(179, 136, 255, 0.2);
+            text-align: center;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             text-decoration: none;
         }
 
+        .action-btn:hover {
+            background: var(--vibrant-purple);
+            color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 136, 255, 0.3);
+        }
+        
         .loading {
             text-align: center;
             padding: 50px 0;
@@ -388,6 +402,84 @@
             color: var(--black);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(179, 136, 255, 0.3);
+        }
+        
+        /* Preview Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 5, 20, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(15, 8, 31, 0.95);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 900px;
+            padding: 30px;
+            position: relative;
+            border: 1px solid var(--vibrant-purple);
+            box-shadow: 0 0 40px rgba(179, 136, 255, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--vibrant-purple);
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 10;
+        }
+
+        .modal-preview {
+            overflow: auto;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .modal-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .modal-text-preview {
+            background: rgba(10, 5, 20, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            max-height: 60vh;
+            overflow: auto;
+            white-space: pre-wrap;
         }
 
         .footer {
@@ -533,6 +625,17 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-preview" id="modalPreview">
+                <!-- Modal content will be injected here -->
+            </div>
+        </div>
+    </div>
+
     <div class="scroll-top" id="scrollTop">
         <i class="fas fa-arrow-up"></i>
     </div>
@@ -620,6 +723,9 @@
         const filters = document.getElementById('filters');
         const loadMoreContainer = document.getElementById('loadMoreContainer');
         const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const modal = document.getElementById('previewModal');
+        const modalPreview = document.getElementById('modalPreview');
+        const closeModalBtn = document.getElementById('closeModal');
 
         // Get file type from URL
         function getFileType(url) {
@@ -754,10 +860,15 @@
 
             // Add download link if available
             if (downloadUrl) {
-                contentHtml += `
-                    <a href="${downloadUrl}" download class="item-link">
-                        <i class="fas fa-download"></i> Download File
-                    </a>
+                 contentHtml += `
+                    <div class="item-actions">
+                        <button class="action-btn view-btn" data-id="${item.id}">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                        <a href="${downloadUrl}" download class="action-btn download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
                 `;
             }
 
@@ -765,6 +876,63 @@
 
             itemEl.innerHTML = contentHtml;
             return itemEl;
+        }
+
+        // Show preview modal
+        function showPreview(itemId) {
+            const item = allItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            modalPreview.innerHTML = ''; // Clear previous content
+
+            let previewContent = `<h2 class="item-title" style="text-align: center; margin-bottom: 20px;">${item.meta.title || item.meta.theme || `${typeNames[item.type]} - ${item.id}`}</h2>`;
+
+            const downloadUrl = item.meta.whisper;
+            if (downloadUrl) {
+                const fileType = getFileType(downloadUrl);
+                if (fileType === 'image') {
+                    previewContent += `<img src="${downloadUrl}" alt="Preview for ${item.id}">`;
+                } else if (fileType === 'text') {
+                     fetch(downloadUrl)
+                        .then(response => response.ok ? response.text() : Promise.reject('File not found'))
+                        .then(text => {
+                            const pre = document.createElement('pre');
+                            pre.className = 'modal-text-preview';
+                            pre.textContent = text.substring(0, 5000); // Limit size
+                            modalPreview.querySelector('.text-container').appendChild(pre);
+                        })
+                        .catch(err => {
+                             modalPreview.querySelector('.text-container').innerHTML = `<p>Could not load text preview.</p>`;
+                        });
+                    previewContent += `<div class="text-container">Loading text preview...</div>`;
+                } else {
+                    const fileTheme = fileTypeThemes[fileType] || fileTypeThemes.default;
+                    const fileIcon = fileTypeIcons[fileType] || fileTypeIcons.default;
+                    previewContent += `
+                        <div class="file-preview-container">
+                            <i class="fas ${fileIcon} file-icon" style="font-size: 5rem; color: ${fileTheme.color}"></i>
+                            <p>Preview not available for this file type.</p>
+                        </div>
+                    `;
+                }
+
+                // Add download button inside modal
+                previewContent += `
+                    <a href="${downloadUrl}" download class="action-btn" style="margin: 20px auto 0; display: inline-flex; width: auto; padding: 10px 25px;">
+                        <i class="fas fa-download"></i> Download File
+                    </a>
+                `;
+            } else {
+                 previewContent += `<p>No file associated with this artifact.</p>`;
+            }
+
+            modalPreview.innerHTML = previewContent;
+            modal.classList.add('active');
+        }
+
+        // Close preview modal
+        function closePreview() {
+            modal.classList.remove('active');
         }
 
         // Load data from detention.json
@@ -907,6 +1075,18 @@
                     currentFilter = btn.dataset.type;
                     applyFilter();
                 });
+            });
+
+            // Modal event listeners
+            closeModalBtn.addEventListener('click', closePreview);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) { // Click on overlay
+                    closePreview();
+                }
+            });
+            feedItems.addEventListener('click', (e) => {
+                const viewBtn = e.target.closest('.view-btn');
+                if (viewBtn) showPreview(viewBtn.dataset.id);
             });
 
             // Load data

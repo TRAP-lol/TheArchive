@@ -1,8 +1,8 @@
-## 🌀 Core Concept
+## Core Concept
 
 trap.lol
 
-## 🧱 Residual Components
+## Residual Components
 
 | Type        | Prefix | Description                          |
 |-------------|--------|--------------------------------------|
@@ -18,18 +18,18 @@ trap.lol
 | Frequency   | FRE    | Verification                         |
 | Octave      | OCT    | Reproduction/derivative              |
 
-## 📦 File Storage
+## File Storage
 
-All artifacts are stored on `share.trap.lol` with direct URLs: htts://share.trap.lol/get//
+All direct URLs: htts://share.trap.lol/get//
 
-## 🔗 Navigation
+## Navigation
 
 - Main Portal: `trap.lol`
 - Share Portal: `trap.lol/share/`
 - Artifact Feed: `trap.lol/feed/`
 - ID Generator: `trap.lol/glass/gen/id/`
 
-## ⚙️ System Files
+## System Files
 
 - `detention.json`: Central registry
 - `/glass/`: Internal system components
