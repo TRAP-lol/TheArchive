@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trap.lol | feed</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --deep-purple: #0f081f;
+            --neon-purple: #5e35b1;
+            --vibrant-purple: #b388ff;
+            --text: rgba(224, 224, 224, 0.9);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --image-color: #8e44ad;
+            --text-color: #27ae60;
+            --pdf-color: #e74c3c;
+            --archive-color: #f39c12;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+        }
+
+        .feed-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(179, 136, 255, 0.2);
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--vibrant-purple);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--vibrant-purple), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            color: var(--vibrant-purple);
+            font-size: 1.1rem;
+            opacity: 0.7;
+            font-variant: small-caps;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
+            color: var(--vibrant-purple);
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-variant: small-caps;
+            letter-spacing: 1px;
+        }
+
+        .filter-btn.active {
+            background: var(--vibrant-purple);
+            color: var(--black);
+            font-weight: bold;
+        }
+
+        .filter-btn:hover {
+            background: rgba(179, 136, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .feed-items {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .feed-item {
+            background: rgba(15, 8, 31, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(179, 136, 255, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feed-item:hover {
+            border-color: var(--vibrant-purple);
+            box-shadow: 0 0 30px rgba(179, 136, 255, 0.1);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(179, 136, 255, 0.1);
+        }
+
+        .item-type {
+            font-size: 0.9rem;
+            background: var(--vibrant-purple);
+            color: var(--black);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .item-date {
+            color: var(--vibrant-purple);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .item-id {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: var(--vibrant-purple);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .item-content {
+            margin-top: 20px;
+        }
+
+        .item-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--vibrant-purple);
+            font-weight: bold;
+        }
+
+        .item-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .meta-item {
+            background: rgba(10, 5, 20, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid var(--vibrant-purple);
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: var(--vibrant-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 0.95rem;
+            word-break: break-word;
+        }
+
+        .item-preview {
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            max-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 5, 20, 0.5);
+            border: 1px solid rgba(179, 136, 255, 0.1);
+        }
+
+        .item-preview img {
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            transition: transform 0.3s ease, opacity 0.5s ease;
+        }
+
+        .item-preview img.lazy-load {
+            opacity: 0;
+        }
+
+        .item-preview img.loaded {
+            opacity: 1;
+        }
+
+        .item-preview img:hover {
+            transform: scale(1.02);
+        }
+
+        .item-preview .icon-placeholder {
+            font-size: 5rem;
+            color: var(--vibrant-purple);
+            opacity: 0.2;
+        }
+
+        .item-narrative {
+            font-style: italic;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(10, 5, 20, 0.5);
+            border-radius: 8px;
+            border-left: 3px solid var(--vibrant-purple);
+            line-height: 1.6;
+        }
+
+        .item-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--vibrant-purple);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: rgba(179, 136, 255, 0.1);
+        }
+
+        .item-link:hover {
+            background: rgba(179, 136, 255, 0.2);
+            text-decoration: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px 0;
+            font-size: 1.2rem;
+            color: var(--vibrant-purple);
+        }
+
+        .loading .spinner {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--vibrant-purple);
+            color: var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            font-size: 1.5rem;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(179, 136, 255, 0.5);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px 0;
+            color: var(--vibrant-purple);
+            font-size: 1.2rem;
+        }
+
+        .file-preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .file-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .file-name {
+            font-size: 0.9rem;
+            color: var(--vibrant-purple);
+            word-break: break-all;
+            margin-bottom: 15px;
+        }
+
+        .view-file-btn {
+            display: inline-block;
+            background: var(--vibrant-purple);
+            color: var(--black);
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .view-file-btn:hover {
+            background: var(--neon-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 136, 255, 0.3);
+        }
+
+        .load-more-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .load-more-btn {
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
+            color: var(--vibrant-purple);
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            font-variant: small-caps;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .load-more-btn:hover {
+            background: var(--vibrant-purple);
+            color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 136, 255, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--vibrant-purple);
+            opacity: 0.5;
+            font-size: 0.9rem;
+            font-variant: small-caps;
+            letter-spacing: 1px;
+        }
+
+        /* Type-specific colors */
+        .type-image .item-type { background: var(--image-color); }
+        .type-image .item-preview { border-color: var(--image-color); }
+        .type-image .view-file-btn { background: var(--image-color); }
+
+        .type-text .item-type { background: var(--text-color); }
+        .type-text .item-preview { border-color: var(--text-color); }
+        .type-text .view-file-btn { background: var(--text-color); }
+
+        .type-pdf .item-type { background: var(--pdf-color); }
+        .type-pdf .item-preview { border-color: var(--pdf-color); }
+        .type-pdf .view-file-btn { background: var(--pdf-color); }
+
+        .type-archive .item-type { background: var(--archive-color); }
+        .type-archive .item-preview { border-color: var(--archive-color); }
+        .type-archive .view-file-btn { background: var(--archive-color); }
+
+        /* Uncanny valley effects */
+        .uncanny-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-conic-gradient(
+                rgba(10, 10, 10, 0.01) 0% 25%, 
+                transparent 0% 50%
+            ) 50% / 300px 300px;
+            pointer-events: none;
+            z-index: -1;
+            mix-blend-mode: overlay;
+            opacity: 0.05;
+            animation: rotate-overlay 240s linear infinite;
+        }
+
+        @keyframes rotate-overlay {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .uncanny-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            opacity: 0.05;
+            pointer-events: none;
+            text-align: center;
+            width: 80%;
+            line-height: 1.6;
+            font-family: 'Courier New', monospace;
+            user-select: none;
+        }
+
+        @media (max-width: 768px) {
+            .feed-container {
+                padding: 15px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .filters {
+                gap: 10px;
+            }
+
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            .item-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .item-preview img {
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="uncanny-overlay"></div>
+    <div class="uncanny-text">
+        Residual patterns emerge in silence • Perception distorts under scrutiny • The boundaries blur when observed
+    </div>
+
+    <div class="feed-container">
+        <div class="header">
+            <h1 class="title">trap.lol feed</h1>
+            <div class="subtitle">chronological</div>
+        </div>
+
+        <div class="filters" id="filters">
+            <div class="filter-btn active" data-type="all">All Artifacts</div>
+            <div class="filter-btn" data-type="CAN">Canticles</div>
+            <div class="filter-btn" data-type="ECH">Echoes</div>
+            <div class="filter-btn" data-type="SON">Sonances</div>
+            <div class="filter-btn" data-type="RES">Resonances</div>
+            <div class="filter-btn" data-type="TIM">Timbres</div>
+            <div class="filter-btn" data-type="SYN">Syncopates</div>
+            <div class="filter-btn" data-type="WAV">Waveforms</div>
+            <div class="filter-btn" data-type="NSE">Noises</div>
+            <div class="filter-btn" data-type="LYR">Lyrics</div>
+            <div class="filter-btn" data-type="FRE">Frequencies</div>
+            <div class="filter-btn" data-type="OCT">Octaves</div>
+        </div>
+
+        <div class="feed-items" id="feedItems">
+            <!-- Items will be loaded here -->
+        </div>
+
+        <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+            <button class="load-more-btn" id="loadMoreBtn">View More</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"><i class="fas fa-spinner"></i></div>
+            Resonating ...
+        </div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <i class="fas fa-ban"></i><br>
+            No artifacts found for this filter
+        </div>
+
+        <div class="footer">
+            trap.lol v0.0.1
+        </div>
+    </div>
+
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script src="../glass/script/return.js"></script>
+    <script>
+        // Component type to display name mapping
+        const typeNames = {
+            'CAN': 'Canticle',
+            'ECH': 'Echo',
+            'SON': 'Sonance',
+            'RES': 'Resonance',
+            'TIM': 'Timbre',
+            'SYN': 'Syncopate',
+            'WAV': 'Waveform',
+            'NSE': 'Noise',
+            'LYR': 'Lyric',
+            'FRE': 'Frequency',
+            'OCT': 'Octave'
+        };
+
+        // Type to icon mapping
+        const typeIcons = {
+            'CAN': 'layer-group',
+            'ECH': 'rainbow',
+            'SON': 'music',
+            'RES': 'image',
+            'TIM': 'heart',
+            'SYN': 'sliders-h',
+            'WAV': 'paint-brush',
+            'NSE': 'wave-square',
+            'LYR': 'font',
+            'FRE': 'certificate',
+            'OCT': 'copy'
+        };
+
+        // File type to icon mapping
+        const fileTypeIcons = {
+            'image': 'file-image',
+            'pdf': 'file-pdf',
+            'archive': 'file-archive',
+            'text': 'file-alt',
+            'default': 'file'
+        };
+
+        // File type themes
+        const fileTypeThemes = {
+            'image': { 
+                name: 'image',
+                color: 'var(--image-color)'
+            },
+            'pdf': { 
+                name: 'pdf',
+                color: 'var(--pdf-color)'
+            },
+            'text': { 
+                name: 'text',
+                color: 'var(--text-color)'
+            },
+            'archive': { 
+                name: 'archive',
+                color: 'var(--archive-color)'
+            },
+            'default': { 
+                name: 'file',
+                color: 'var(--vibrant-purple)'
+            }
+        };
+
+        // Global variables
+        let allItems = [];
+        let filteredItems = [];
+        let visibleItems = [];
+        let currentFilter = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 6;
+        let isLoading = false;
+        let imageObserver;
+
+        // DOM Elements
+        const feedItems = document.getElementById('feedItems');
+        const loadingEl = document.getElementById('loading');
+        const noResultsEl = document.getElementById('noResults');
+        const scrollTopBtn = document.getElementById('scrollTop');
+        const filters = document.getElementById('filters');
+        const loadMoreContainer = document.getElementById('loadMoreContainer');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+        // Get file type from URL
+        function getFileType(url) {
+            if (!url) return 'default';
+            const ext = url.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext)) return 'image';
+            if (ext === 'pdf') return 'pdf';
+            if (['zip', 'rar', '7z'].includes(ext)) return 'archive';
+            if (['txt', 'md', 'html', 'css', 'js'].includes(ext)) return 'text';
+            return 'default';
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Extract filename from URL
+        function getFilenameFromUrl(url) {
+            if (!url) return '';
+            return url.split('/').pop();
+        }
+
+        // Create feed item element with enhanced preview capabilities
+        function createFeedItem(item) {
+            const typeName = typeNames[item.type] || item.type;
+            const icon = typeIcons[item.type] || 'question-circle';
+
+            const itemEl = document.createElement('div');
+            itemEl.className = 'feed-item';
+            itemEl.dataset.type = item.type;
+            itemEl.dataset.id = item.id;
+            itemEl.dataset.date = item.created;
+
+            let filePreviewHtml = '';
+            let fileClass = '';
+            let downloadUrl = '';
+
+            // Check if we have a whisper URL that points to a file
+            if (item.meta.whisper) {
+                downloadUrl = item.meta.whisper;
+                const fileType = getFileType(downloadUrl);
+                const fileTheme = fileTypeThemes[fileType] || fileTypeThemes.default;
+                const fileName = getFilenameFromUrl(downloadUrl);
+                const fileIcon = fileTypeIcons[fileType] || fileTypeIcons.default;
+
+                // Apply file type class for styling
+                fileClass = `type-${fileType}`;
+
+                // Create preview based on file type
+                if (fileType === 'image') {
+                    filePreviewHtml = `
+                        <div class="item-preview">
+                            <img data-src="${downloadUrl}" alt="${item.meta.title || 'Artifact preview'}" class="lazy-load">
+                        </div>
+                    `;
+                } else {
+                    filePreviewHtml = `
+                        <div class="file-preview-container">
+                            <i class="fas ${fileIcon} file-icon" style="color: ${fileTheme.color}"></i>
+                            <div class="file-name">${fileName}</div>
+                            <a href="${downloadUrl}" target="_blank" class="view-file-btn" style="background: ${fileTheme.color}">
+                                <i class="fas fa-eye"></i> View File
+                            </a>
+                        </div>
+                    `;
+                }
+            }
+
+            // Apply file type class to the feed item if applicable
+            if (fileClass) {
+                itemEl.classList.add(fileClass);
+            }
+
+            let contentHtml = `
+                <div class="item-header">
+                    <div class="item-type"><i class="fas fa-${icon}"></i> ${typeName}</div>
+                    <div class="item-date">${formatDate(item.created)}</div>
+                </div>
+
+                <div class="item-id">${item.type}-${item.id}</div>
+
+                <div class="item-content">
+            `;
+
+            // Add file preview if available
+            if (filePreviewHtml) {
+                contentHtml += filePreviewHtml;
+            }
+
+            // Add title if available
+            if (item.meta.title) {
+                contentHtml += `<div class="item-title">${item.meta.title}</div>`;
+            } else if (item.meta.theme) {
+                contentHtml += `<div class="item-title">${item.meta.theme}</div>`;
+            } else if (item.meta.details) {
+                contentHtml += `<div class="item-title">${item.meta.details.substring(0, 60)}</div>`;
+            }
+
+            // Add narrative if available
+            if (item.meta.narrative) {
+                contentHtml += `<div class="item-narrative">${item.meta.narrative}</div>`;
+            }
+
+            // Add metadata fields
+            if (Object.keys(item.meta).length > 0) {
+                contentHtml += `<div class="item-meta">`;
+
+                for (const [key, value] of Object.entries(item.meta)) {
+                    // Skip fields we've already handled
+                    if (['title', 'theme', 'narrative', 'whisper', 'details'].includes(key)) continue;
+
+                    let displayValue = value;
+
+                    if (Array.isArray(value)) {
+                        displayValue = value.join(', ');
+                    } else if (typeof value === 'object') {
+                        displayValue = JSON.stringify(value);
+                    }
+
+                    contentHtml += `
+                        <div class="meta-item">
+                            <div class="meta-label">${key}</div>
+                            <div class="meta-value">${displayValue}</div>
+                        </div>
+                    `;
+                }
+
+                contentHtml += `</div>`;
+            }
+
+            // Add download link if available
+            if (downloadUrl) {
+                contentHtml += `
+                    <a href="${downloadUrl}" download class="item-link">
+                        <i class="fas fa-download"></i> Download File
+                    </a>
+                `;
+            }
+
+            contentHtml += `</div></div>`;
+
+            itemEl.innerHTML = contentHtml;
+            return itemEl;
+        }
+
+        // Load data from detention.json
+        async function loadData() {
+            try {
+                const response = await fetch('/glass/data/detention.json');
+                const data = await response.json();
+
+                // Prepare all items
+                allItems = [];
+
+                // Process each registry type
+                for (const [type, items] of Object.entries(data.registry)) {
+                    items.forEach(item => {
+                        if (item.id) {
+                            allItems.push({
+                                type: type,
+                                id: item.id,
+                                created: item.created || new Date().toISOString(),
+                                meta: item.meta || {}
+                            });
+                        }
+                    });
+                }
+
+                // Sort by creation date (newest first)
+                allItems.sort((a, b) => new Date(b.created) - new Date(a.created));
+
+                // Apply initial filter
+                applyFilter();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                loadingEl.innerHTML = '<div class="no-results">Error loading artifacts. Please try again later.</div>';
+            }
+        }
+
+        // Apply current filter
+        function applyFilter() {
+            if (currentFilter === 'all') {
+                filteredItems = [...allItems];
+            } else {
+                filteredItems = allItems.filter(item => item.type === currentFilter);
+            }
+
+            currentPage = 1;
+            visibleItems = [];
+            feedItems.innerHTML = '';
+            loadMoreContainer.style.display = 'none';
+
+            if (filteredItems.length === 0) {
+                noResultsEl.style.display = 'block';
+                loadingEl.style.display = 'none';
+            } else {
+                noResultsEl.style.display = 'none';
+                loadingEl.style.display = 'block';
+                loadMoreItems();
+            }
+        }
+
+        // Load more items when button is clicked
+        function loadMoreItems() {
+            if (isLoading) return;
+
+            isLoading = true;
+            loadingEl.style.display = 'block';
+            loadMoreContainer.style.display = 'none';
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const itemsToAdd = filteredItems.slice(startIndex, endIndex);
+
+            // Simulate loading delay for effect
+            setTimeout(() => {
+                if (itemsToAdd.length > 0) {
+                    itemsToAdd.forEach(item => {
+                        const itemEl = createFeedItem(item);
+                        feedItems.appendChild(itemEl);
+                        
+                        const lazyImage = itemEl.querySelector('.lazy-load');
+                        if (lazyImage) {
+                            imageObserver.observe(lazyImage);
+                        }
+                        visibleItems.push(item);
+                    });
+                    currentPage++;
+                }
+
+                loadingEl.style.display = 'none';
+                isLoading = false;
+
+                // Check if there are more items to load
+                if (endIndex < filteredItems.length) {
+                    loadMoreContainer.style.display = 'block';
+                } else {
+                    loadMoreContainer.style.display = 'none';
+                }
+            }, 500);
+        }
+
+        function handleScroll() {
+            // Show/hide scroll to top button
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        }
+
+        // Initialize the feed
+        function init() {
+            // Setup Intersection Observer for lazy loading images
+            imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy-load');
+                        img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                });
+            }, { 
+                rootMargin: "0px 0px 200px 0px" // Pre-load images 200px before they enter the viewport
+            });
+
+            // Add event listeners
+            window.addEventListener('scroll', handleScroll);
+
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            loadMoreBtn.addEventListener('click', loadMoreItems);
+
+            // Add filter event listeners
+            filters.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filters.querySelector('.active').classList.remove('active');
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.type;
+                    applyFilter();
+                });
+            });
+
+            // Load data
+            loadData();
+        }
+
+        // Start the feed
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

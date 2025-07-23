@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trap.lol | share</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --deep-purple: #0f081f;
+            --neon-purple: #5e35b1;
+            --vibrant-purple: #b388ff;
+            --text: rgba(224, 224, 224, 0.9);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --image-color: #8e44ad;
+            --text-color: #27ae60;
+            --pdf-color: #e74c3c;
+            --archive-color: #f39c12;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--black) 0%, var(--deep-purple) 70%);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Distortion effects - Visual noise */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9IjAuMDQiLz48L3N2Zz4=');
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Glitch effect */
+        .glitch {
+            position: relative;
+            animation: glitch-anim 5s infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        /* Header with 3D effect */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(179, 136, 255, 0.2);
+            position: relative;
+        }
+
+        .logo-container {
+            perspective: 1000px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--vibrant-purple), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .logo:hover {
+            transform: rotateY(20deg);
+        }
+
+        .tagline {
+            color: var(--vibrant-purple);
+            font-size: 1.1rem;
+            opacity: 0.7;
+            font-variant: small-caps;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Artifact Grid */
+        .artifacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .artifact-card {
+            background: rgba(15, 8, 31, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(179, 136, 255, 0.1);
+            transition: all 0.4s ease;
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(0) rotateY(0);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .artifact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--vibrant-purple);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .artifact-card:hover {
+            transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateY(-10px);
+            border-color: var(--vibrant-purple);
+            box-shadow: 0 20px 40px rgba(179, 136, 255, 0.2);
+        }
+
+        .artifact-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .artifact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(179, 136, 255, 0.1);
+        }
+
+        .artifact-type {
+            font-size: 0.9rem;
+            background: var(--vibrant-purple);
+            color: var(--black);
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .artifact-date {
+            color: var(--vibrant-purple);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .artifact-id {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: var(--vibrant-purple);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .artifact-preview {
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 5, 20, 0.5);
+            border: 1px solid rgba(179, 136, 255, 0.1);
+            position: relative;
+        }
+
+        .artifact-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.4s ease;
+        }
+
+        .artifact-preview:hover img {
+            transform: scale(1.05);
+        }
+
+        .file-placeholder {
+            font-size: 3.5rem;
+            color: var(--vibrant-purple);
+            opacity: 0.2;
+        }
+
+        .artifact-content {
+            margin-top: 20px;
+        }
+
+        .artifact-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--vibrant-purple);
+            font-weight: bold;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .artifact-desc {
+            color: #d1c4e9;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 4.5em;
+        }
+
+        .artifact-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
+            color: var(--vibrant-purple);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            background: var(--vibrant-purple);
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(179, 136, 255, 0.3);
+        }
+
+        .artifact-link {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        /* Footer with animated gradient */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            color: var(--vibrant-purple);
+            opacity: 0.5;
+            font-size: 0.9rem;
+            font-variant: small-caps;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--vibrant-purple), transparent);
+        }
+
+        /* Particle background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Type-specific colors */
+        .type-CAN .artifact-type { background: var(--vibrant-purple); }
+        .type-ECH .artifact-type { background: #ff6b6b; }
+        .type-SON .artifact-type { background: #4ecdc4; }
+        .type-RES .artifact-type { background: var(--image-color); }
+        .type-TIM .artifact-type { background: #ff9f1c; }
+        .type-SYN .artifact-type { background: #6a0572; }
+        .type-WAV .artifact-type { background: #1a936f; }
+        .type-NSE .artifact-type { background: #2b2d42; }
+        .type-LYR .artifact-type { background: #e76f51; }
+        .type-FRE .artifact-type { background: #2a9d8f; }
+        .type-OCT .artifact-type { background: #e9c46a; }
+
+        /* Loading animation */
+        .loading {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(179, 136, 255, 0.2);
+            border-top: 5px solid var(--vibrant-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Preview Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 5, 20, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(15, 8, 31, 0.95);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 900px;
+            padding: 30px;
+            position: relative;
+            border: 1px solid var(--vibrant-purple);
+            box-shadow: 0 0 40px rgba(179, 136, 255, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--vibrant-purple);
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 10;
+        }
+
+        .modal-preview {
+            max-height: 70vh;
+            overflow: auto;
+            text-align: center;
+        }
+
+        .modal-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+        }
+
+        .modal-text-preview {
+            background: rgba(10, 5, 20, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            max-height: 60vh;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+
+        .modal-file-icon {
+            font-size: 5rem;
+            color: var(--vibrant-purple);
+            margin: 30px 0;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--vibrant-purple);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .meta-item {
+            background: rgba(10, 5, 20, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--vibrant-purple);
+        }
+
+        .meta-label {
+            font-size: 0.9rem;
+            color: var(--vibrant-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            word-break: break-word;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .artifacts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div id="particles-js"></div>
+
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-preview" id="modalPreview"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">trap.lol</div>
+                <div class="tagline">Share Portal</div>
+            </div>
+        </div>
+
+        <div class="artifacts-grid" id="artifactsGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Resonating with artifacts...</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            trap.lol v0.0.1
+        </div>
+    </div>
+
+    <script src="..//glass/script/return.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Component type to display names
+        const typeNames = {
+            'CAN': 'Canticle',
+            'ECH': 'Echo',
+            'SON': 'Sonance',
+            'RES': 'Resonance',
+            'TIM': 'Timbre',
+            'SYN': 'Syncopate',
+            'WAV': 'Waveform',
+            'NSE': 'Noise',
+            'LYR': 'Lyric',
+            'FRE': 'Frequency',
+            'OCT': 'Octave'
+        };
+
+        // File type icons
+        const fileIcons = {
+            'image': 'file-image',
+            'pdf': 'file-pdf',
+            'archive': 'file-archive',
+            'text': 'file-alt',
+            'default': 'file'
+        };
+
+        // Global variables
+        let artifacts = [];
+
+        // Initialize particles background
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#b388ff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#5e35b1",
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out"
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "grab" },
+                    onclick: { enable: true, mode: "push" }
+                }
+            },
+            retina_detect: true
+        });
+
+        // Get file type from URL
+        function getFileType(url) {
+            if (!url) return 'default';
+            const ext = url.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext)) return 'image';
+            if (ext === 'pdf') return 'pdf';
+            if (['zip', 'rar', '7z'].includes(ext)) return 'archive';
+            if (['txt', 'md', 'html', 'css', 'js'].includes(ext)) return 'text';
+            return 'default';
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            if (!dateString) return 'Unknown date';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Load data from detention.json
+        async function loadArtifacts() {
+            try {
+                const response = await fetch('/glass/data/detention.json');
+
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok (${response.status})`);
+                }
+
+                const data = await response.json();
+
+                // Extract all artifacts with whisper property
+                artifacts = [];
+                for (const [type, items] of Object.entries(data.registry)) {
+                    for (const item of items) {
+                        if (item.meta && item.meta.whisper) {
+                            artifacts.push({
+                                ...item,
+                                type: type,
+                                fileType: getFileType(item.meta.whisper),
+                                directUrl: item.meta.whisper,
+                                previewUrl: getFileType(item.meta.whisper) === 'image' ? item.meta.whisper : null
+                            });
+                        }
+                    }
+                }
+
+                // Check if we have a hash URL to show specific artifact
+                const hash = window.location.hash.substring(1);
+                renderArtifacts();
+
+                if (hash) {
+                    // Hash format: #ECH-BAXAI7
+                    const [type, id] = hash.split('-');
+                    if (type && id) {
+                        // Wait for artifacts to render before showing
+                        setTimeout(() => {
+                            showArtifactById(type, id);
+                        }, 300);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading artifacts:', error);
+                document.getElementById('artifactsGrid').innerHTML = `
+                    <div class="loading">
+                        <div style="font-size: 4rem; color: #e74c3c; margin-bottom: 20px;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <p>Error: ${error.message}</p>
+                        <p>Failed to load artifacts. Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Show artifact by ID from hash URL
+        function showArtifactById(type, id) {
+            const artifact = artifacts.find(a => a.type === type && a.id === id);
+            if (artifact) {
+                showPreview(artifact.id);
+            }
+        }
+
+        // Render artifacts
+        function renderArtifacts() {
+            const grid = document.getElementById('artifactsGrid');
+            grid.innerHTML = '';
+
+            if (artifacts.length === 0) {
+                grid.innerHTML = `
+                    <div class="loading">
+                        <div style="font-size: 3rem; color: var(--vibrant-purple); margin-bottom: 20px;">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <p>No artifacts found</p>
+                    </div>
+                `;
+                return;
+            }
+            artifacts.forEach(artifact => {
+                const typeName = typeNames[artifact.type] || artifact.type;
+                const icon = fileIcons[artifact.fileType] || 'file';
+                const date = formatDate(artifact.created);
+
+                // Create permanent link URL
+                const permalink = `#${artifact.type}-${artifact.id}`;
+
+                const card = document.createElement('div');
+                card.className = `artifact-card type-${artifact.type}`;
+                card.dataset.id = artifact.id;
+
+                card.innerHTML = `
+                    <a class="artifact-link" href="${permalink}"></a>
+
+                    <div class="artifact-header">
+                        <div class="artifact-type">${typeName}</div>
+                        <div class="artifact-date">${date}</div>
+                    </div>
+
+                    <div class="artifact-id">${artifact.type}-${artifact.id}</div>
+
+                    <div class="artifact-content">
+                        <h3 class="artifact-title">${artifact.meta.title || artifact.id}</h3>
+                        <p class="artifact-desc">${artifact.meta.description || 'No description available for this artifact'}</p>
+
+                        <div class="artifact-actions">
+                            <div class="action-btn preview-btn" data-id="${artifact.id}">
+                                <i class="fas fa-eye"></i> Preview
+                            </div>
+                            <div class="action-btn download-btn" data-url="${artifact.directUrl}" data-filename="${artifact.meta.title || artifact.id}">
+                                <i class="fas fa-download"></i> Download
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            // Add event listeners to buttons
+            document.querySelectorAll('.preview-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const artifactId = this.dataset.id;
+                    // Set URL hash
+                    window.location.hash = `#${this.closest('.artifact-card').dataset.type}-${artifactId}`;
+                    showPreview(artifactId);
+                });
+            });
+
+            document.querySelectorAll('.download-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.dataset.url;
+                    const filename = this.dataset.filename;
+                    downloadFile(url, filename);
+                });
+            });
+        }
+
+        // Show preview modal
+        function showPreview(artifactId) {
+            const artifact = artifacts.find(a => a.id === artifactId);
+            if (!artifact) return;
+
+            const modalPreview = document.getElementById('modalPreview');
+            modalPreview.innerHTML = '';
+
+            // Add title
+            const title = document.createElement('div');
+            title.className = 'modal-title';
+            title.textContent = artifact.meta.title || `Artifact: ${artifact.type}-${artifact.id}`;
+            modalPreview.appendChild(title);
+
+            // Add preview based on file type
+            if (artifact.fileType === 'image') {
+                const img = document.createElement('img');
+                img.src = artifact.directUrl;
+                img.alt = artifact.meta.title || 'Artifact preview';
+                modalPreview.appendChild(img);
+            } 
+            else if (artifact.fileType === 'text' || artifact.fileType === 'pdf') {
+                // For text-based files, fetch and display content
+                fetch(artifact.directUrl)
+                    .then(response => response.text())
+                    .then(text => {
+                        const pre = document.createElement('pre');
+                        pre.className = 'modal-text-preview';
+                        pre.textContent = text.substring(0, 5000); // Limit to first 5000 chars
+                        modalPreview.appendChild(pre);
+                    })
+                    .catch(error => {
+                        const errorMsg = document.createElement('div');
+                        errorMsg.innerHTML = `
+                            <div class="modal-file-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <p>Error loading file content: ${error.message}</p>
+                        `;
+                        modalPreview.appendChild(errorMsg);
+                    });
+            } 
+            else {
+                // For other file types, show an icon
+                const icon = document.createElement('div');
+                icon.className = 'modal-file-icon';
+                const fileIcon = fileIcons[artifact.fileType] || 'file';
+                icon.innerHTML = `<i class="fas ${fileIcon}"></i>`;
+                modalPreview.appendChild(icon);
+
+                const message = document.createElement('p');
+                message.textContent = 'Preview not available for this file type';
+                message.style.textAlign = 'center';
+                modalPreview.appendChild(message);
+            }
+
+            // Show metadata
+            if (Object.keys(artifact.meta).length > 0) {
+                const metaContainer = document.createElement('div');
+                metaContainer.className = 'modal-meta';
+
+                for (const [key, value] of Object.entries(artifact.meta)) {
+                    if (['whisper', 'title', 'description'].includes(key)) continue;
+
+                    const metaItem = document.createElement('div');
+                    metaItem.className = 'meta-item';
+
+                    const label = document.createElement('div');
+                    label.className = 'meta-label';
+                    label.textContent = key;
+
+                    const val = document.createElement('div');
+                    val.className = 'meta-value';
+                    val.textContent = typeof value === 'object' ? JSON.stringify(value) : value;
+
+                    metaItem.appendChild(label);
+                    metaItem.appendChild(val);
+                    metaContainer.appendChild(metaItem);
+                }
+
+                modalPreview.appendChild(metaContainer);
+            }
+
+
+            // Add download button to modal
+            const downloadBtn = document.createElement('a');
+            downloadBtn.href = artifact.directUrl;
+            downloadBtn.download = artifact.meta.title || artifact.id;
+            downloadBtn.className = 'action-btn';
+            downloadBtn.style.marginTop = '20px';
+            downloadBtn.innerHTML = `<i class="fas fa-download"></i> Download File`;
+            modalPreview.appendChild(downloadBtn);
+
+            // Show modal
+            document.getElementById('previewModal').classList.add('active');
+        }
+
+        // Download file
+        function downloadFile(url, filename) {
+            if (!url) {
+                alert('Download URL not available for this artifact');
+                return;
+            }
+
+            // Create temporary link for download
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename || 'artifact';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load artifacts
+            loadArtifacts();
+
+            // Close modal event
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('previewModal').classList.remove('active');
+            });
+
+            // Handle hash changes
+            window.addEventListener('hashchange', function() {
+                const hash = window.location.hash.substring(1);
+                if (hash) {
+                    const [type, id] = hash.split('-');
+                    if (type && id) {
+                        showArtifactById(type, id);
+                    }
+                }
+            });
+
+            // Add glitch effect to random elements periodically
+            setInterval(() => {
+                const cards = document.querySelectorAll('.artifact-card');
+                if (cards.length > 0) {
+                    const randomCard = cards[Math.floor(Math.random() * cards.length)];
+                    randomCard.classList.add('glitch');
+
+                    setTimeout(() => {
+                        randomCard.classList.remove('glitch');
+                    }, 500);
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

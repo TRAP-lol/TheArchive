@@ -1,0 +1,1416 @@
+{
+  "meta": {
+    "project_name": "trap.lol",
+    "description": "The sponge",
+    "workflow": {
+      "sequence": ["SON", "TIM", "RES", "WAV", "SYN", "NSE", "LYR", "FRE"],
+      "collections": ["CAN", "ECH"],
+      "rules": {
+        "dependency_map": {
+          "SYN": ["RES", "WAV"],
+          "NSE": ["SYN"],
+          "FRE": ["NSE", "LYR"]
+        }
+      }
+    },
+    "last_update": "2025-07-22T13:03:00Z",
+    "version": "0.0.1"
+  },
+  "id_meta": {
+    "SON": {
+      "text": "Sonance",
+      "painless-definition": "The sensation caused by vibrating wave motion that is perceived by the organs of hearing | (not painless)",
+      "description": "Foundational theme/concept",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          },
+          {
+            "name": "theme",
+            "type": "string",
+            "rules": "Primary artistic concept"
+          },
+          {
+            "name": "sources",
+            "type": "array",
+            "rules": "Source Links"
+          }
+        ]
+      }
+    },
+    "TIM": {
+      "text": "Timbre",
+      "painless-definition": "The quality of a sound independent of its pitch and volume",
+      "description": "Emotional texture conveyed by the piece",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          },
+          {
+            "name": "emotion",
+            "type": "enum",
+            "options": ["Joy", "Anger", "Fear", "Sadness", "Surprise"]
+          }
+        ]
+      }
+    },
+    "RES": {
+      "text": "Resonance",
+      "painless-definition": "Something that evokes an association, or a strong emotion",
+      "description": "Single source image that vibrates through the work",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          },
+          { "name": "attribution", "type": "string", "optional": true }
+        ]
+      }
+    },
+    "WAV": {
+      "text": "Waveform",
+      "painless-definition": "The shape of a physical wave, such as sound, electric current or electromagnetic radiation, or its representation obtained by plotting a characteristic of the phenomenon versus another variable, often time.",
+      "description": "Preliminary sketches",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          },
+          {
+            "name": "iterations",
+            "type": "int",
+            "rules": "Number of sketch versions"
+          },
+          {
+            "name": "progression",
+            "type": "array",
+            "rules": "Ordered sketch URLs"
+          }
+        ]
+      }
+    },
+    "SYN": {
+      "text": "Syncopate",
+      "painless-definition": "To stress or accentuate the weak beat of a rhythm",
+      "description": "Composed visual rhythm through photo manipulation",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          },
+          {
+            "name": "source_ids",
+            "type": "array",
+            "rules": "Linked RES/SON IDs"
+          }
+        ]
+      }
+    },
+    "NSE": {
+      "text": "Noise",
+      "painless-definition": "Unwanted part of a signal",
+      "description": "Final visual distortion layer",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          }
+        ]
+      }
+    },
+    "LYR": {
+      "text": "Lyric",
+      "painless-definition": "The words of a song or other vocal music. The singular form often refers to a part of the words, whereas the plural form can refer to all of the words",
+      "description": "Textual accompaniment",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          }
+        ]
+      }
+    },
+    "FRE": {
+      "text": "Frequency",
+      "painless-definition": "Number of times an event occurred in an experiment",
+      "description": "Verification",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          },
+          { "name": "signature", "type": "hash", "algo": "SHA256" },
+          { "name": "timestamp", "type": "ISO8601" }
+        ]
+      }
+    },
+    "OCT": {
+      "text": "Octave",
+      "painless-definition": "An interval of twelve semitones spanning eight degrees of the diatonic scale, representing a doubling or halving in pitch frequency",
+      "description": "Reproduction/derivative of existing residual",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          },
+          {
+            "name": "source_id",
+            "type": "id",
+            "rules": "Original residual ID "
+          },
+          {
+            "name": "medium",
+            "type": "enum",
+            "options": ["Print"]
+          },
+          { "name": "authorized", "type": "bool", "default": true }
+        ]
+      }
+    },
+    "CAN": {
+      "text": "Canticle",
+      "painless-definition": "A chant, hymn or song, especially a nonmetrical one, with words from a biblical text",
+      "description": "Echo collections",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "rules": "The general title of the canticle"
+          },
+          {
+            "name": "components",
+            "type": "object",
+            "rules": "Map of type:ID pairs"
+          }
+        ]
+      }
+    },
+    "ECH": {
+      "text": "Echo",
+      "painless-definition": "A reflected sound that is heard again by its initial observer",
+      "description": "A single page or raw idea from a Canticle",
+      "meta_structure": {
+        "fields": [
+          {
+            "name": "description",
+            "type": "string",
+            "rules": "Description or any additional details"
+          },
+          {
+            "name": "rating",
+            "type": "enum",
+            "options": ["NSFW", "SFW", "SSFW"],
+            "default": "SFW"
+          },
+          {
+            "name": "whisper",
+            "type": "url",
+            "rules": "Link to share.trap.lol"
+          },
+          { "name": "canticle_id", "type": "id", "rules": "Parent CAN ID" },
+          {
+            "name": "sonance_id",
+            "type": "id",
+            "rules": "Relevant SON ID",
+            "optional": "true"
+          }
+        ]
+      }
+    }
+  },
+  "validation": {
+    "ID_FORMAT_REGEX": "^[A-Z0-9]{6}$"
+  },
+  "registry": {
+    "SON": [
+      {
+        "id": "9CKXJO",
+        "created": "2025-07-10T08:00:00Z",
+        "meta": {
+          "description": "Images related to suicide",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/cOGsdgwGQ4zi/9CKXJO.zip",
+          "theme": "Suicide",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "ZEYCCK",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "Images of eyes and tears and related",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/KUkspkbtTcHn/ZEYCCK.zip",
+          "theme": "Tears and Eyes",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "2X46V3",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "3O6R6W",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "4DFEKR",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "6MB6SU",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "DG3ZPX",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "OLWYHT",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "PIDREC",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "PJ0M6R",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "R2RK15",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "SNEO19",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      },
+      {
+        "id": "UNREL1",
+        "created": "2025-07-12T16:20:00Z",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "theme": "",
+          "sources": ["wallhaven.cc"]
+        }
+      }
+    ],
+    "TIM": [],
+    "RES": [],
+    "WAV": [],
+    "SYN": [],
+    "NSE": [],
+    "LYR": [],
+    "FRE": [],
+    "OCT": [],
+    "CAN": [
+      {
+        "id": "IOGR7U",
+        "created": "2025-07-15T13:06:00Z",
+        "meta": {
+          "description": "My first sketch book",
+          "rating": "NSFW",
+          "whisper": "",
+          "title": "Where It All Begins",
+          "components": {
+            "SON": [],
+            "ECH": []
+          }
+        }
+      },
+      {
+        "id": "Q071BN",
+        "created": "2025-07-18T09:15:00Z",
+        "meta": {
+          "description": "My second sketch book",
+          "rating": "NSFW",
+          "whisper": "",
+          "title": "Fear",
+          "components": {
+            "SON": ["9CKXJO"],
+            "ECH": ["BAXAI7", "3FP2SR"]
+          }
+        }
+      }
+    ],
+    "ECH": [
+      {
+        "id": "C2G53I",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/uC2hbt00iQpB/ECH-C2G53I.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "ZN7GOH",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/2ToFOVkqJNIq/ECH-ZN7GOH.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "U6MDG6",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/0sh5HGEx9y9g/ECH-U6MDG6.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "H6I9D4",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/l7NzwP9XboAP/ECH-H6I9D4.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "QCVSLX",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/NNNclO9PWfIc/ECH-QCVSLX.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "SCM12C",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/CwJrsRttwa2b/ECH-SCM12C.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "A6FCK0",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/mfsPE8TKV78m/ECH-A6FCK0.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "AX429Q",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/qgNBucEYWq03/ECH-AX429Q.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "SSCSWK",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/60tCgIv8QjyN/ECH-SSCSWK.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "UR8MSK",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/QRQtE6YOlwAb/ECH-UR8MSK.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "S3K94O",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/jsCrTKb1ENEi/ECH-S3K94O.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "Y1ZJU2",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/9MWkrtdYXdm8/ECH-Y1ZJU2.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "1ZDAK9",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/1IvQJx8roFye/ECH-1ZDAK9.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "0U6NRO",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/cVlanupV4qvy/ECH-0U6NRO.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "YK7SLN",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/SoHlnhEKyC6G/ECH-YK7SLN.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "PS8KW0",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/ca4RYAXI8bC6/ECH-PS8KW0.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "A8DSLM",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/BENKpJ4nc2VN/ECH-A8DSLM.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "T08VRQ",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/iM42SKnEv1FS/ECH-T08VRQ.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "0QUCKA",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/cVlanupV4qvy/ECH-0QUCKA.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "PBW18E",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/G9WyzT52dG6i/ECH-PBW18E.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "R1BJXD",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": " https://share.trap.lol/get/oEDBhCihvKDs/ECH-R1BJXD.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "PIV0JN",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/P0ttugdnBxfA/ECH-PIV0JN.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "N3P8IK",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/3YwxrVMcrAfl/ECH-N3P8IK.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "FEX5QG",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/4nBKHUKN1TKC/ECH-FEX5QG.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "7P0CHH",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/xNJ08nJ99MWA/ECH-7P0CHH.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "DLE75B",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/0tU9y0xOqHmH/ECH-DLE75B.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "EQDW2J",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/iPIjQzX3ES3k/ECH-EQDW2J.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "41AY33",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/bOgSmSqnScjp/ECH-41AY33.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "K6QR4L",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/HN7PmPkzVUrx/ECH-K6QR4L.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "JQD8PN",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "AKU36R",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "HGXVLP",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/YbTdnTO9RHwg/ECH-HGXVLP.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "9BV0HL",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/4WiKI6c2NYU0/ECH-9BV0HL.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "FUAH0B",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/To1Ydi8nxe4G/ECH-FUAH0B.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "KRQJUS",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/CA8gIImYmiWB/ECH-KRQJUS.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "6HK4DU",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/Pl9lLJll7hd5/ECH-6HK4DU.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "KNNI18",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/s2U5Uzi5SE5K/ECH-KNNI18.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "ABGKDL",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/kIaGjMmGkzz5/ECH-ABGKDL.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "AU0XZL",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/B0ANrdXqerBV/ECH-AU0XZL.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "J9VAQE",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/Uaz2l8NgCtT9/ECH-J9VAQE.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "0UAVU6",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/t7RoMJl9ssU1/ECH-0UAVU6.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "I8J9YP",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/H3ietyEqMOA2/ECH-I8J9YP.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "9Z78TB",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/CAB9o00aIiYE/ECH-9Z78TB.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "DIHFJT",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/lp4MEEvDjETL/ECH-DIHFJT.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "GBPU4M",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/NWBibzTIWTOa/ECH-GBPU4M.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "5MA3MO",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/6rspszFDvohW/ECH-5MA3MO.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "2V3DP3",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/rC1fQXX6vEuX/ECH-2V3DP3.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "B2YI6Y",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/NUhz6J5Fkbzm/ECH-B2YI6Y.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "CIV0AY",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/V8QIgvbRc3R8/ECH-CIV0AY.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "81E25L",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "Y5PKOZ",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/Jbb2nbmmqc2z/ECH-Y5PKOZ.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "37IUW8",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "EI73N0",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/ACxJvhqJcKUi/ECH-EI73N0.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "QENHIH",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/qHrhGnt09b8I/ECH-QENHIH.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "CG560R",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/UebAqhdOPmWB/ECH-CG560R.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "XDX9WV",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/F2r0tuAmax7R/ECH-XDX9WV.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "RA4AR8",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "https://share.trap.lol/get/AQdbQFVU7qTc/ECH-RA4AR8.webp",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "55JEHX",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "J1K8HW",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "CIT39B",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "AR5N2P",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "OPOSWO",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "WMGLT0",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "PPYR8Q",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "L3S12D",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "XIOVIK",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "KI3058",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "DL2K8C",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "L5X6SC",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "EFIL9I",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "F2ADHO",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "ZCGKJW",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "ZJQJBG",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "JWMGDP",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "38RFMY",
+        "created": "",
+        "meta": {
+          "description": "",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "IOGR7U",
+          "sonance_id": ""
+        }
+      },
+      {
+        "id": "BAXAI7",
+        "created": "2025-07-18T14:30:00Z",
+        "meta": {
+          "description": "I came back and I hated it",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "Q071BN",
+          "sonance_id": "9CKXJO"
+        }
+      },
+      {
+        "id": "3FP2SR",
+        "created": "2025-07-19T11:45:00Z",
+        "meta": {
+          "description": "The boy who burned it all himself",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "Q071BN",
+          "sonance_id": "9CKXJO"
+        }
+      },
+      {
+        "id": "FWU626",
+        "created": "2025-07-22T11:11:00Z",
+        "meta": {
+          "description": "A body and a face",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "Q071BN",
+          "sonance_id": "ZEYCCK"
+        }
+      },
+      {
+        "id": "W3HHJU",
+        "created": "2025-07-23T11:11:00Z",
+        "meta": {
+          "description": "Lay in tears",
+          "rating": "NSFW",
+          "whisper": "",
+          "canticle_id": "Q071BN",
+          "sonance_id": "ZEYCCK"
+        }
+      }
+    ]
+  }
+}

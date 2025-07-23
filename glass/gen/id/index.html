@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trap.lol | idgen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --deep-purple: #0f081f;
+            --neon-purple: #5e35b1;
+            --vibrant-purple: #b388ff;
+            --text: rgba(224, 224, 224, 0.9);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            perspective: 1000px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(94, 53, 177, 0.02) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(94, 53, 177, 0.02) 0%, transparent 20%);
+        }
+
+        .generator-container {
+            width: 90%;
+            max-width: 650px;
+            background: rgba(15, 8, 31, 0.85);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            z-index: 20;
+            border: 1px solid rgba(179, 136, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(94, 53, 177, 0.2);
+            transition: var(--transition);
+        }
+
+        .generator-container:hover {
+            box-shadow: 0 0 40px rgba(179, 136, 255, 0.3);
+        }
+
+        .portal-header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .portal-title {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, var(--vibrant-purple), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(179, 136, 255, 0.3);
+        }
+
+        .portal-subtitle {
+            color: var(--vibrant-purple);
+            font-size: 1rem;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            font-variant: small-caps;
+        }
+
+        .portal-generator {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            transform-style: preserve-3d;
+            border-radius: 50%;
+            overflow: visible;
+            filter: drop-shadow(0 0 20px rgba(179, 136, 255, 0.3));
+        }
+
+        .portal-generator:hover {
+            transform: scale(1.03) rotateX(3deg) rotateY(3deg);
+        }
+
+        .portal-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid var(--vibrant-purple);
+            box-shadow: 0 0 10px rgba(179, 136, 255, 0.3);
+            animation: rotate linear infinite;
+            transform-style: preserve-3d;
+            filter: blur(0.3px);
+            transform: rotate3d(1, 1, 1, 0deg);
+        }
+
+        .ring-1 {
+            width: 100%;
+            height: 100%;
+            animation-duration: 35s;
+            opacity: 0.8;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+        }
+
+        .ring-2 {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            animation-duration: 30s;
+            animation-direction: reverse;
+            opacity: 0.7;
+        }
+
+        .ring-3 {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            animation-duration: 25s;
+            opacity: 0.6;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+        }
+
+        .ring-4 {
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            animation-duration: 20s;
+            animation-direction: reverse;
+            opacity: 0.5;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg) rotateX(0deg) rotate3d(1,1,1,0deg); }
+            to { transform: rotate(360deg) rotateX(360deg) rotate3d(1,1,1,360deg); }
+        }
+
+        .portal-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            background: var(--vibrant-purple);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 3s infinite alternate;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .id-display-container {
+            background: rgba(15, 8, 31, 0.7);
+            border: 1px solid var(--neon-purple);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 500px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .id-display-container.active {
+            background: rgba(30, 15, 60, 0.9);
+            box-shadow: 0 0 20px rgba(179, 136, 255, 0.3);
+            border-color: var(--vibrant-purple);
+        }
+
+        .id-display {
+            font-size: 2.2rem;
+            letter-spacing: 0.6rem;
+            color: var(--vibrant-purple);
+            text-align: center;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(179, 136, 255, 0.5);
+            padding: 15px 10px;
+            transition: var(--transition);
+            font-family: 'Courier New', monospace;
+            background: rgba(10, 5, 20, 0.3);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .id-display.empty {
+            color: rgba(179, 136, 255, 0.3);
+            text-shadow: none;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
+            color: var(--vibrant-purple);
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: rgba(179, 136, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(94, 53, 177, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        @keyframes pulse {
+            0% { 
+                box-shadow: 0 0 15px 5px rgba(179, 136, 255, 0.3); 
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 25px 8px rgba(179, 136, 255, 0.5); 
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            100% { 
+                box-shadow: 0 0 15px 5px rgba(179, 136, 255, 0.3); 
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .component-select-container {
+            position: relative;
+            margin: 30px 0;
+            z-index: 10;
+        }
+
+        .component-select-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--vibrant-purple);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .component-select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(10, 5, 20, 0.7);
+            border: 1px solid var(--neon-purple);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            appearance: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .component-select:focus {
+            outline: none;
+            border-color: var(--vibrant-purple);
+            box-shadow: 0 0 0 2px rgba(179, 136, 255, 0.3);
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--vibrant-purple);
+            pointer-events: none;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(10, 5, 20, 0.5);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #b39ddb;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid rgba(94, 53, 177, 0.3);
+            font-variant: small-caps;
+            letter-spacing: 1px;
+        }
+
+        .status-icon {
+            margin-right: 10px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            text-align: center;
+            color: #7e57c2;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(94, 53, 177, 0.2);
+            font-variant: small-caps;
+        }
+
+        /* Particles background */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Uncanny valley effects */
+        .subtle-distortion {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            background: radial-gradient(circle at center, transparent 70%, rgba(179, 136, 255, 0.01) 100%);
+            animation: distortion-shift 30s infinite alternate;
+        }
+
+        @keyframes distortion-shift {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(1px, -1px); }
+            40% { transform: translate(-1px, 2px); }
+            60% { transform: translate(2px, 0); }
+            80% { transform: translate(-2px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .uncanny-overlay {
+            position: fixed;
+            top极狐: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-conic-gradient(
+                rgba(10, 10, 10, 0.01) 0% 25%, 
+                transparent 0% 50%
+            ) 50% / 300px 300px;
+            pointer-events: none;
+            z-index: 4;
+            mix-blend-mode: overlay;
+            opacity: 0.05;
+            animation: rotate-overlay 240s linear infinite;
+        }
+
+        @keyframes rotate-overlay {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .secret-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(15, 8, 31, 0.9);
+            border: 1px solid var(--vibrant-purple);
+            padding: 10px 15px;
+            border-radius: 4极狐px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            z-index: 100;
+            max-width: 300px;
+            backdrop-filter: blur(5px);
+            font-family: 'Courier New', monospace;
+        }
+
+        .secret-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mastodon-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            opacity: 0.2;
+            transition: var(--transition);
+        }
+
+        .mastodon-link:hover {
+            opacity: 0.8;
+        }
+
+        .mastodon-link svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--vibrant-purple);
+            filter: drop-shadow(0 0 3px rgba(179, 136, 255, 0.6));
+        }
+
+        .copyright {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            opacity: 0.2;
+            letter-spacing: 1px;
+            font-variant: small-caps;
+        }
+
+        /* Viscous ripple effect */
+        .viscous-ripple {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            transform: translate(-50%, -50%) scale(0);
+            background: radial-gradient(circle, transparent 30%, rgba(179, 136, 255, 0.3) 100%);
+            filter: blur(20px);
+            animation: viscousWave 2s cubic-bezier(0.34, 0.01, 0.1, 0.99) forwards;
+            opacity: 0.8;
+        }
+
+        @keyframes viscousWave {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0.8;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+            }
+            30% {
+                border-radius: 45%;
+            }
+            50% {
+                opacity: 0.5;
+                filter: blur(25px);
+                border-radius: 40%;
+            }
+            70% {
+                border-radius: 55%;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(3);
+                opacity: 0;
+                width: 500px;
+                height: 500px;
+                filter: blur(40px);
+                border-radius: 50%;
+            }
+        }
+
+        .viscosity-distortion {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(179, 136, 255, 0.2) 0%, transparent 60%);
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            animation: viscousDistort 2.5s cubic-bezier(0.2, 0.1, 0.1, 0.9) forwards;
+            filter: blur(25px);
+            opacity: 0.7;
+        }
+
+        @keyframes viscousDistort {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0.7;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+            }
+            30% {
+                border-radius: 40%;
+            }
+            60% {
+                opacity: 0.4;
+                border-radius: 60%;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(3.5);
+                opacity: 0;
+                width: 600px;
+                height: 600px;
+                border-radius: 50%;
+            }
+        }
+
+        .portal-light {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(179, 136, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+            border-radius: 50%;
+            animation: light-pulse 8s infinite alternate;
+        }
+
+        @keyframes light-pulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+        }
+
+        @media (max-width: 768px) {
+            .portal-generator {
+                width: 200px;
+                height: 200px;
+            }
+
+            .portal-title {
+                font-size: 1.8rem;
+            }
+
+            .id-display {
+                font-size: 1.6rem;
+                letter-spacing: 0.4rem;
+            }
+
+            .generator-container {
+                padding: 20px;
+            }
+
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+        }
+
+        .id-copy-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(179, 136, 255, 0.5);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .id-copy-indicator.visible {
+            opacity: 1;
+        }
+
+        .id-copy-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Distortion effects -->
+    <div class="subtle-distortion"></div>
+    <div class="uncanny-overlay"></div>
+
+    <!-- Copyright -->
+    <div class="copyright">trap.lol</div>
+
+    <!-- Particles -->
+    <div id="particles"></div>
+
+    <!-- Generator Container -->
+    <div class="generator-container">
+        <div class="portal-header">
+            <h1 class="portal-title">ID GENERATOR</h1>
+            <div class="portal-subtitle">Auditory-Visual Manifestation System</div>
+        </div>
+
+        <div class="component-select-container">
+            <label class="component-select-label">RESONANCE COMPONENT</label>
+            <div style="position: relative;">
+                <select id="componentType" class="component-select">
+                    <option value="">SELECT COMPONENT TYPE</option>
+                    <option value="CAN">CANTICLE</option>
+                    <option value="ECH">ECHO</option>
+                    <option value="SON">SONANCE</option>
+                    <option value="RES">RESONANCE</option>
+                    <option value="TIM">TIMBRE</option>
+                    <option value="SYN">SYNCOPATE</option>
+                    <option value="WAV">WAVEFORM</option>
+                    <option value="NSE">NOISE</option>
+                    <option value="LYR">LYRIC</option>
+                    <option value="FRE">FREQUENCY</option>
+                    <option value="OCT">OCTAVE</option>
+                </select>
+                <div class="select-arrow">▼</div>
+            </div>
+        </div>
+
+        <div class="portal-generator" id="portalGenerator">
+            <div class="portal-light"></div>
+            <div class="portal-ring ring-1"></div>
+            <div class="portal-ring ring-2"></div>
+            <div class="portal-ring ring-3"></div>
+            <div class="portal-ring ring-4"></div>
+            <div class="portal-core"></div>
+        </div>
+
+        <div class="id-display-container">
+            <div class="id-display empty" id="idOutput">
+                <div class="id-copy-indicator" id="copyIndicator">
+                    <div class="id-copy-text">COPIED!</div>
+                </div>
+                ------</div>
+            <div class="btn-container">
+                <button class="btn" id="copyBtn">
+                    <i class="fas fa-copy"></i> COPY ID
+                </button>
+                <button class="btn" id="generateBtn">
+                    <i class="fas fa-redo"></i> GENERATE NEW
+                </button>
+            </div>
+        </div>
+
+        <div class="status-message" id="statusMessage">
+            <i class="fas fa-info-circle status-icon"></i>
+            Select component type and tap portal to generate ID
+        </div>
+
+        <div class="footer">
+            v0.0.1
+        </div>
+    </div>
+
+    <script src="/glass/script/return.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create subtle flickering effect
+            function subtleFlicker() {
+                const flickerIntensity = 0.01;
+                const flicker = Math.random() * flickerIntensity;
+                document.body.style.opacity = 1 - flicker;
+                setTimeout(subtleFlicker, 50 + Math.random() * 200);
+            }
+            subtleFlicker();
+
+            // Create particles with unnatural movements
+            function createParticles() {
+                const container = document.getElementById('particles');
+                const particleCount = window.innerWidth < 768 ? 50 : 120;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+
+                    // Position randomly
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+
+                    // Random size
+                    const size = Math.random() * 3 + 1;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+
+                    // Random blur and opacity
+                    const blur = Math.random() * 4;
+                    const opacity = Math.random() * 0.3 + 0.1;
+                    particle.style.boxShadow = `0 0 ${blur}px ${blur}px rgba(179, 136, 255, ${opacity})`;
+
+                    // Random animation with occasional unnatural jumps
+                    const duration = Math.random() * 25 + 15;
+                    const delay = Math.random() * 5;
+
+                    // Create unnatural particle animation
+                    const keyframes = `
+                        @keyframes float-${i} {
+                            0% { 
+                                transform: translate(0, 0) rotate(0deg) scale(1);
+                                opacity: 0; 
+                            }
+                            ${Math.random() * 20 + 10}% { 
+                                opacity: ${Math.random() * 0.8 + 0.2};
+                            }
+                            ${Math.random() * 30 + 50}% { 
+                                transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px);
+                                opacity: ${Math.random() * 0.8 + 0.2};
+                            }
+                            70% { 
+                                opacity: ${Math.random() * 0.8 + 0.2}; 
+                            }
+                            100% { 
+                                transform: translate(${Math.random() * 400 - 200}px, ${Math.random() * 400 - 200}px) 
+                                           rotate(${Math.random() * 360}deg) 
+                                           scale(${Math.random() * 0.5 + 0.5});
+                                opacity: 0; 
+                            }
+                        }
+                    `;
+
+                    const style = document.createElement('style');
+                    style.textContent = keyframes;
+                    document.head.appendChild(style);
+
+                    particle.style.animation = `float-${i} ${duration}s ${delay}s linear infinite`;
+                    particle.style.willChange = 'transform, opacity';
+
+                    container.appendChild(particle);
+                }
+            }
+
+            createParticles();
+
+            // Component registry
+            const registry = {
+                "CAN": [],
+                "ECH": [],
+                "SON": [],
+                "RES": [],
+                "TIM": [],
+                "SYN": [],
+                "WAV": [],
+                "NSE": [],
+                "LYR": [],
+                "FRE": [],
+                "OCT": []
+            };
+
+            // DOM Elements
+            const componentSelect = document.getElementById('componentType');
+            const idOutput = document.getElementById('idOutput');
+            const portalGenerator = document.getElementById('portalGenerator');
+            const statusMessage = document.getElementById('statusMessage');
+            const copyBtn = document.getElementById('copyBtn');
+            const generateBtn = document.getElementById('generateBtn');
+            const idContainer = document.querySelector('.id-display-container');
+            const copyIndicator = document.getElementById('copyIndicator');
+
+            // Available characters for IDs
+            const ID_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            // Current ID storage
+            let currentId = "";
+            let currentComponent = "";
+
+            // Load registry data from detention.json
+            async function loadRegistry() {
+                try {
+                    const response = await fetch('/glass/data/detention.json');
+                    const data = await response.json();
+
+                    // Update the registry with data from JSON
+                    Object.keys(registry).forEach(key => {
+                        if(data.registry[key]) {
+                            registry[key] = data.registry[key]
+                                .filter(item => item.id && item.id.length === 6)
+                                .map(item => item.id);
+                        }
+                    });
+
+                    statusMessage.innerHTML = `<i class="fas fa-check-circle status-icon"></i> Registry loaded successfully`;
+                } catch (error) {
+                    console.error('Error loading registry:', error);
+                    statusMessage.innerHTML = `<i class="fas fa-exclamation-triangle status-icon"></i> Error loading registry - using local cache`;
+                }
+            }
+
+            // Generate a base ID
+            function generateBaseId() {
+                const array = new Uint32Array(6);
+                crypto.getRandomValues(array);
+                return Array.from(array)
+                    .map(value => ID_CHARS[value % ID_CHARS.length])
+                    .join('');
+            }
+
+            // Check if ID is unique for the selected component
+            function isIdUnique(component, id) {
+                if (!component) return false;
+                return !registry[component].includes(id);
+            }
+
+            // Portal interaction with distorted geometry
+            function handlePortalClick() {
+                const component = componentSelect.value;
+
+                if (!component) {
+                    statusMessage.innerHTML = `<i class="fas fa-exclamation-circle status-icon"></i> Please select a component type first`;
+                    return;
+                }
+
+                // Create viscous ripple effect with distortion
+                const viscousRipple = document.createElement('div');
+                viscousRipple.classList.add('viscous-ripple');
+                viscousRipple.style.left = `50%`;
+                viscousRipple.style.top = `50%`;
+                portalGenerator.appendChild(viscousRipple);
+
+                // Create viscosity distortion
+                const viscosityDistortion = document.createElement('div');
+                viscosityDistortion.classList.add('viscosity-distortion');
+                viscosityDistortion.style.left = `50%`;
+                viscosityDistortion.style.top = `50%`;
+                portalGenerator.appendChild(viscosityDistortion);
+
+                // Remove elements after animation
+                setTimeout(() => {
+                    if (viscousRipple.parentNode) portalGenerator.removeChild(viscousRipple);
+                    if (viscosityDistortion.parentNode) portalGenerator.removeChild(viscosityDistortion);
+                }, 2800);
+
+                // Portal deformation effect
+                const start = Date.now();
+                const duration = 600;
+
+                function animateDeformation() {
+                    const elapsed = Date.now() - start;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    // Custom viscous easing function
+                    const viscousProgress = 1 - Math.pow(1 - progress, 3);
+
+                    // Add slight distortion to the transformation
+                    const distortion = Math.sin(progress * Math.PI * 5) * 0.05;
+
+                    portalGenerator.style.transform = `
+                        scale(${1 + viscousProgress * 0.05 + distortion})
+                        rotateX(${viscousProgress * 5 + distortion * 10}deg) 
+                        rotateY(${viscousProgress * 5 + distortion * 10}deg)
+                    `;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateDeformation);
+                    } else {
+                        portalGenerator.style.transform = '';
+                    }
+                }
+
+                animateDeformation();
+
+                // Generate unique ID
+                generateUniqueId();
+            }
+
+            // Generate unique ID
+            function generateUniqueId() {
+                const component = componentSelect.value;
+
+                if (!component) {
+                    statusMessage.innerHTML = `<i class="fas fa-exclamation-circle status-icon"></i> Please select a component type first`;
+                    return;
+                }
+
+                statusMessage.innerHTML = `<i class="fas fa-sync fa-spin status-icon"></i> Consulting the audio-visual field...`;
+
+                let newId;
+                let attempts = 0;
+                const maxAttempts = 50;
+
+                do {
+                    newId = generateBaseId();
+                    attempts++;
+
+                    if (attempts > maxAttempts) {
+                        statusMessage.innerHTML = `<i class="fas fa-times-circle status-icon"></i> Resonance overflow - try again`;
+                        return;
+                    }
+                } while (!isIdUnique(component, newId));
+
+                // Update current ID
+                currentId = `${component}-${newId}`;
+                currentComponent = component;
+
+                // Update display
+                idOutput.textContent = currentId;
+                idOutput.classList.remove('empty');
+                idContainer.classList.add('active');
+
+                statusMessage.innerHTML = 
+                    `<i class="fas fa-check-circle status-icon"></i> ID generated after ${attempts} ${attempts === 1 ? 'resonance' : 'resonances'}`;
+            }
+
+            // Copy ID to clipboard
+            function copyIdToClipboard() {
+                if (!currentId) {
+                    statusMessage.innerHTML = `<i class="fas fa-exclamation-circle status-icon"></i> Generate an ID first`;
+                    return;
+                }
+
+                navigator.clipboard.writeText(currentId).then(() => {
+                    // Show success message
+                    statusMessage.innerHTML = `<i class="fas fa-check status-icon"></i> Copied ${currentId} to clipboard`;
+
+                    // Visual feedback
+                    copyIndicator.classList.add('visible');
+                    setTimeout(() => {
+                        copyIndicator.classList.remove('visible');
+                    }, 1000);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                    statusMessage.innerHTML = `<i class="fas fa-times-circle status-icon"></i> Failed to copy ID`;
+                });
+            }
+
+            // Event listeners
+            portalGenerator.addEventListener('click', handlePortalClick);
+            generateBtn.addEventListener('click', handlePortalClick);
+            copyBtn.addEventListener('click', copyIdToClipboard);
+
+            // Copy flash animation style
+            const copyFlashStyle = document.createElement('style');
+            copyFlashStyle.textContent = `
+                @keyframes copyFlash {
+                    0% { 
+                        color: var(--vibrant-purple);
+                        text-shadow: 0 0 10px rgba(179, 136, 255, 0.5);
+                    }
+                    50% { 
+                        color: white;
+                        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+                    }
+                    100% { 
+                        color: var(--vibrant-purple);
+                        text-shadow: 0 0 10px rgba(179, 136, 255, 0.5);
+                    }
+                }
+            `;
+            document.head.appendChild(copyFlashStyle);
+
+            // Initialize
+            loadRegistry();
+
+            // Console branding
+            console.log("%c[TRAP.LOL ID GENERATOR]", "color: #b388ff; font-weight: bold; font-size: 16px;");
+            console.log("%cPatterns resonate in the static", "color: #7e57c2; font-size: 14px; font-style: italic;");
+        });
+    </script>
+</body>
+</html>
