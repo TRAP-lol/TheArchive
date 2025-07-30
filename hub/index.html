@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trap.lol | hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --deep-purple: #0f081f;
+            --neon-purple: #5e35b1;
+            --vibrant-purple: #b388ff;
+            --text: rgba(224, 224, 224, 0.9);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --card-bg: rgba(15, 8, 31, 0.7);
+        }
+
+        body {
+            background: var(--black);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(94, 53, 177, 0.02) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(94, 53, 177, 0.02) 0%, transparent 20%);
+            line-height: 1.6;
+        }
+
+        .distortion-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+            animation: rotate-overlay 240s linear infinite;
+        }
+
+        @keyframes rotate-overlay {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hub-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1.hub-title {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--vibrant-purple), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0 0 15px rgba(179, 136, 255, 0.3);
+            animation: glitch-anim 5s infinite;
+        }
+
+        .hub-subtitle {
+            color: var(--vibrant-purple);
+            font-size: 1.2rem;
+            opacity: 0.7;
+            font-variant: small-caps;
+            letter-spacing: 3px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        @keyframes glitch-anim {
+            0% { text-shadow: 0 0 0 var(--vibrant-purple); }
+            20% { text-shadow: -2px 2px 0 rgba(255, 0, 0, 0.3); }
+            40% { text-shadow: -2px -2px 0 rgba(0, 255, 0, 0.3); }
+            60% { text-shadow: 2px 2px 0 rgba(0, 0, 255, 0.3); }
+            80% { text-shadow: 2px -2px 0 rgba(255, 255, 0, 0.3); }
+            100% { text-shadow: 0 0 0 var(--vibrant-purple); }
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .portal-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 35px 30px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(179, 136, 255, 0.1);
+            transition: var(--transition);
+            text-align: center;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.4s ease;
+        }
+
+        .portal-card:hover {
+            border-color: var(--vibrant-purple);
+            box-shadow: 0 0 40px rgba(179, 136, 255, 0.2);
+            transform: translateY(-10px);
+        }
+
+        .portal-icon {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            color: var(--vibrant-purple);
+            transition: var(--transition);
+        }
+
+        .portal-card:hover .portal-icon {
+            transform: scale(1.2);
+            text-shadow: 0 0 20px rgba(179, 136, 255, 0.6);
+        }
+
+        .portal-title {
+            font-size: 1.8rem;
+            color: var(--vibrant-purple);
+            margin-bottom: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .portal-description {
+            color: #d1c4e9;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .portal-link {
+            display: inline-block;
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
+            color: var(--vibrant-purple);
+            padding: 12px 30px;
+            border-radius: 30px;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 1rem;
+            font-variant: small-caps;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(179, 136, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .portal-link:hover::before {
+            left: 100%;
+        }
+
+        .portal-link:hover {
+            background: var(--vibrant-purple);
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(179, 136, 255, 0.4);
+        }
+
+        .uncanny-text {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            font-size: 0.8rem;
+            opacity: 0.05;
+            pointer-events: none;
+            text-align: right;
+            width: 200px;
+            line-height: 1.6;
+            font-family: 'Courier New', monospace;
+            user-select: none;
+            z-index: 2;
+        }
+
+        .hub-footer {
+            text-align: center;
+            padding: 60px 0 30px;
+            color: var(--vibrant-purple);
+            opacity: 0.5;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            font-variant: small-caps;
+        }
+
+        #hub-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .portal-home {
+            background: linear-gradient(45deg, rgba(15, 8, 31, 0.8), rgba(94, 53, 177, 0.2));
+        }
+
+        .portal-share {
+            background: linear-gradient(45deg, rgba(15, 8, 31, 0.8), rgba(94, 53, 177, 0.2));
+        }
+
+        .portal-feed {
+            background: linear-gradient(45deg, rgba(15, 8, 31, 0.8), rgba(94, 53, 177, 0.2));
+        }
+
+        .portal-void {
+            background: linear-gradient(45deg, rgba(15, 8, 31, 0.8), rgba(94, 53, 177, 0.2));
+        }
+
+        .portal-home:hover {
+            background: linear-gradient(45deg, rgba(15, 8, 31, 0.9), rgba(94, 53, 177, 0.3));
+        }
+
+        .portal-share:hover {
+            background: linear-gradient(45deg, rgba(15, 8, 31, 0.9), rgba(94, 53, 177, 0.3));
+        }
+
+        .portal-feed:hover {
+            background: linear-gradient(45deg, rgba(15, 8极, 31, 0.9), rgba(94, 53, 177, 0.3));
+        }
+
+        .portal-void:hover {
+            background: linear-gradient(45deg, rgba(15, 8, 31, 0.9), rgba(94, 53, 177, 0.3));
+        }
+
+        /* Particles animation */
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            20% { transform: translate(-5px, 5px) rotate(-2deg) scale(1.05); }
+            40% { transform: translate(5px, -5px) rotate(2deg) scale(0.95); }
+            60% { transform: translate(-5px, 0) rotate(-1deg) scale(1.03); }
+            80% { transform: translate(5px, 0) rotate(1deg) scale(0.97); }
+            100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .hub-title {
+                font-size: 2.5rem;
+            }
+
+            .hub-subtitle {
+                font-size: 1rem;
+            }
+
+            .portal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .portal-card {
+                min-height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="distortion-overlay"></div>
+    <div id="hub-particles"></div>
+    <div class="uncanny-text">
+        Convergence point • Four paths diverge • Choose your resonance • Amplify your frequency
+    </div>
+
+    <div class="hub-container">
+        <div class="portal-grid">
+            <!-- Home Portal -->
+            <div class="portal-card portal-home">
+                <i class="fas fa-home portal-icon"></i>
+                <h3 class="portal-title">Home Portal</h3>
+                <p class="portal-description">
+                </p>
+                <a href="/" class="portal-link">
+                    <i class="fas fa-arrow-right"></i> Open
+                </a>
+            </div>
+
+            <!-- Share Portal -->
+            <div class="portal-card portal-share">
+                <i class="fas fa-share-alt portal-icon"></i>
+                <h3 class="portal-title">Share Portal</h3>
+                <p class="portal-description">
+                </p>
+                <a href="/share/" class="portal-link">
+                    <i class="fas fa-arrow-right"></i> Open
+                </a>
+            </div>
+
+            <!-- Feed Portal -->
+            <div class="portal-card portal-feed">
+                <i class="fas fa-rss portal-icon"></i>
+                <h3 class="portal-title">Feed Portal</h3>
+                <p class="portal-description">
+                </p>
+                <a href="/feed/" class="portal-link">
+                    <i class="fas fa-arrow-right"></i> Open
+                </a>
+            </div>
+
+            <!-- Void Portal -->
+            <div class="portal-card portal-void">
+                <i class="fas fa-infinity portal-icon"></i>
+                <h3 class="portal-title">Void Portal</h3>
+                <p class="portal-description">
+                </p>
+                <a href="/void/" class="portal-link">
+                    <i class="fas fa-arrow-right"></i> Open
+                </a>
+            </div>
+        </div>
+
+        <div class="hub-footer">
+            trap.lol
+        </div>
+    </div>
+
+    <script>
+        // Create particles for background
+        function createParticles() {
+            const container = document.getElementById('hub-particles');
+            const particleCount = window.innerWidth < 768 ? 40 : 80;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                // Position randomly
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+
+                // Random size
+                const size = Math.random() * 4 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+
+                // Random blur and opacity
+                const blur = Math.random() * 6;
+                const opacity = Math.random() * 0.4 + 0.1;
+                particle.style.boxShadow = `0 0 ${blur}px ${blur}px rgba(179, 136, 255, ${opacity})`;
+
+                // Random animation
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 5;
+
+                particle.style.animation = `float ${duration}s ${delay}s ease-in-out infinite`;
+                particle.style.willChange = 'transform, opacity';
+
+                container.appendChild(particle);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create particles
+            createParticles();
+
+            // Console branding
+            console.log("%c[TRAP.LOL HUB PORTAL]", "color: #b388ff; font-weight: bold; font-size: 18px;");
+            console.log("%cAll portals converge at this nexus", "color: #7e57c2; font-size: 14px; font-style: italic;");
+        });
+    </script>
+</body>
+</html>

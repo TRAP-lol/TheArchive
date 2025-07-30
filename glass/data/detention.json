@@ -1,26 +1,36 @@
 {
   "meta": {
     "project_name": "trap.lol",
-    "description": "The sponge",
+    "description": "stop consuming, start producing",
     "workflow": {
-      "sequence": ["SON", "TIM", "RES", "WAV", "SYN", "NSE", "LYR", "FRE"],
-      "collections": ["CAN", "ECH"],
+      "sequence": ["SON", "CAN", "ECH", "TIM", "RES", "WAV", "SYN", "NSE", "LYR", "FRE"],
+      "collections": ["CAN"],
+      "reproduce": ["OCT"],
       "rules": {
         "dependency_map": {
-          "SYN": ["RES", "WAV"],
+          "SON": [],
+          "CAN": [],
+          "ECH": ["CAN", "SON"],
+          "TIM": ["SON"],
+          "RES": ["TIM"],
+          "WAV": ["RES"],
+          "SYN": ["WAV"],
           "NSE": ["SYN"],
-          "FRE": ["NSE", "LYR"]
+          "LYR": ["NSE"],
+          "FRE": ["LYR"],
+          "OCT": []
         }
       }
     },
-    "last_update": "2025-07-22T13:03:00Z",
-    "version": "0.0.1"
+    "last_update": "2025-07-30T13:36:00Z",
+    "version": "0.0.2"
   },
   "id_meta": {
     "SON": {
       "text": "Sonance",
+      "context": "Collection of images that provide a source of inspiration, education or reference for a residual",
       "painless-definition": "The sensation caused by vibrating wave motion that is perceived by the organs of hearing | (not painless)",
-      "description": "Foundational theme/concept",
+      "description": "Theme",
       "meta_structure": {
         "fields": [
           {
@@ -32,7 +42,7 @@
             "name": "rating",
             "type": "enum",
             "options": ["NSFW", "SFW", "SSFW"],
-            "default": "SFW"
+            "default": "NSFW"
           },
           {
             "name": "whisper",
@@ -42,20 +52,27 @@
           {
             "name": "theme",
             "type": "string",
-            "rules": "Primary artistic concept"
+            "rules": "Primary concept"
           },
           {
             "name": "sources",
             "type": "array",
             "rules": "Source Links"
+          },
+          {
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
           }
         ]
       }
     },
     "TIM": {
       "text": "Timbre",
+      "context": "The intended emotion of the residual",
       "painless-definition": "The quality of a sound independent of its pitch and volume",
-      "description": "Emotional texture conveyed by the piece",
+      "description": "Emotion",
       "meta_structure": {
         "fields": [
           {
@@ -67,7 +84,7 @@
             "name": "rating",
             "type": "enum",
             "options": ["NSFW", "SFW", "SSFW"],
-            "default": "SFW"
+            "default": "NSFW"
           },
           {
             "name": "whisper",
@@ -77,15 +94,22 @@
           {
             "name": "emotion",
             "type": "enum",
-            "options": ["Joy", "Anger", "Fear", "Sadness", "Surprise"]
+            "options": ["Limerence", "Dudgeon", "Chthonomorphism", "Eucatastrophe", "Nychthemeral", "Borborygmus", "Sphallolalia", "Mauerbauertraurigkeit"]
+          },
+          {
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
           }
         ]
       }
     },
     "RES": {
       "text": "Resonance",
+      "context": "The single image from the sonnance that provokes the residual",
       "painless-definition": "Something that evokes an association, or a strong emotion",
-      "description": "Single source image that vibrates through the work",
+      "description": "Highlight",
       "meta_structure": {
         "fields": [
           {
@@ -97,21 +121,28 @@
             "name": "rating",
             "type": "enum",
             "options": ["NSFW", "SFW", "SSFW"],
-            "default": "SFW"
+            "default": "NSFW"
           },
           {
             "name": "whisper",
             "type": "url",
             "rules": "Link to share.trap.lol"
           },
-          { "name": "attribution", "type": "string", "optional": true }
+          { "name": "attribution", "type": "string", "optional": true },
+          {
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
+          }
         ]
       }
     },
     "WAV": {
       "text": "Waveform",
+      "context": "Sketches that evolve the residual",
       "painless-definition": "The shape of a physical wave, such as sound, electric current or electromagnetic radiation, or its representation obtained by plotting a characteristic of the phenomenon versus another variable, often time.",
-      "description": "Preliminary sketches",
+      "description": "Sketch",
       "meta_structure": {
         "fields": [
           {
@@ -139,14 +170,21 @@
             "name": "progression",
             "type": "array",
             "rules": "Ordered sketch URLs"
+          },
+          {
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
           }
         ]
       }
     },
     "SYN": {
       "text": "Syncopate",
+      "context": "A single composed image that inspires the residual",
       "painless-definition": "To stress or accentuate the weak beat of a rhythm",
-      "description": "Composed visual rhythm through photo manipulation",
+      "description": "Compose",
       "meta_structure": {
         "fields": [
           {
@@ -169,14 +207,21 @@
             "name": "source_ids",
             "type": "array",
             "rules": "Linked RES/SON IDs"
+          },
+          {
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
           }
         ]
       }
     },
     "NSE": {
       "text": "Noise",
+      "context": "A visual representation of the residual",
       "painless-definition": "Unwanted part of a signal",
-      "description": "Final visual distortion layer",
+      "description": "Visual",
       "meta_structure": {
         "fields": [
           {
@@ -194,14 +239,21 @@
             "name": "whisper",
             "type": "url",
             "rules": "Link to share.trap.lol"
+          },
+          {
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
           }
         ]
       }
     },
     "LYR": {
       "text": "Lyric",
+      "context": "A poem inspired by the residual",
       "painless-definition": "The words of a song or other vocal music. The singular form often refers to a part of the words, whereas the plural form can refer to all of the words",
-      "description": "Textual accompaniment",
+      "description": "Poem",
       "meta_structure": {
         "fields": [
           {
@@ -213,20 +265,27 @@
             "name": "rating",
             "type": "enum",
             "options": ["NSFW", "SFW", "SSFW"],
-            "default": "SFW"
+            "default": "NSFW"
           },
           {
             "name": "whisper",
             "type": "url",
             "rules": "Link to share.trap.lol"
+          },
+          {
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
           }
         ]
       }
     },
     "FRE": {
       "text": "Frequency",
+      "context": "Proof of the residuals history",
       "painless-definition": "Number of times an event occurred in an experiment",
-      "description": "Verification",
+      "description": "History",
       "meta_structure": {
         "fields": [
           {
@@ -252,8 +311,9 @@
     },
     "OCT": {
       "text": "Octave",
+      "context": "Reproductions",
       "painless-definition": "An interval of twelve semitones spanning eight degrees of the diatonic scale, representing a doubling or halving in pitch frequency",
-      "description": "Reproduction/derivative of existing residual",
+      "description": "Reproduce",
       "meta_structure": {
         "fields": [
           {
@@ -275,21 +335,23 @@
           {
             "name": "source_id",
             "type": "id",
-            "rules": "Original residual ID "
+            "rules": "Relevant artifact Id"
           },
+          { "name": "authorized", "type": "bool", "default": false },
           {
-            "name": "medium",
-            "type": "enum",
-            "options": ["Print"]
-          },
-          { "name": "authorized", "type": "bool", "default": true }
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
+          }
         ]
       }
     },
     "CAN": {
       "text": "Canticle",
+      "context": "Sketchbooks",
       "painless-definition": "A chant, hymn or song, especially a nonmetrical one, with words from a biblical text",
-      "description": "Echo collections",
+      "description": "Sketchbook",
       "meta_structure": {
         "fields": [
           {
@@ -317,14 +379,21 @@
             "name": "components",
             "type": "object",
             "rules": "Map of type:ID pairs"
+          },
+          {
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
           }
         ]
       }
     },
     "ECH": {
       "text": "Echo",
+      "context": "Sketchbook entries",
       "painless-definition": "A reflected sound that is heard again by its initial observer",
-      "description": "A single page or raw idea from a Canticle",
+      "description": "Thought",
       "meta_structure": {
         "fields": [
           {
@@ -349,6 +418,12 @@
             "type": "id",
             "rules": "Relevant SON ID",
             "optional": "true"
+          },
+          {
+            "name": "hash",
+            "type": "hash",
+            "algo": "SHA256",
+            "rules": "Once hashed, never to be changed again."
           }
         ]
       }
@@ -361,145 +436,123 @@
     "SON": [
       {
         "id": "9CKXJO",
-        "created": "2025-07-10T08:00:00Z",
+        "created": "2025-07-18T00:00:00Z",
         "meta": {
           "description": "Images related to suicide",
           "rating": "NSFW",
-          "whisper": "https://share.trap.lol/get/cOGsdgwGQ4zi/9CKXJO.zip",
+          "whisper": "https://share.trap.lol/get/lNocNyfgDDhB/9CKXJO.zip",
           "theme": "Suicide",
           "sources": ["wallhaven.cc"]
         }
       },
       {
         "id": "ZEYCCK",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-07-18T00:00:00Z",
         "meta": {
-          "description": "Images of eyes and tears and related",
+          "description": "Images of eyes, tears and related",
           "rating": "NSFW",
-          "whisper": "https://share.trap.lol/get/KUkspkbtTcHn/ZEYCCK.zip",
+          "whisper": "https://share.trap.lol/get/VXg6TOnHpnpG/ZEYCCK.zip",
           "theme": "Tears and Eyes",
           "sources": ["wallhaven.cc"]
         }
       },
       {
         "id": "2X46V3",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
-          "description": "",
+          "description": "Random images",
           "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
+          "whisper": "https://share.trap.lol/get/GYbtfgDVhEoe/2X46V3.zip",
+          "theme": "Random",
           "sources": ["wallhaven.cc"]
         }
       },
       {
         "id": "3O6R6W",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
-          "description": "",
+          "description": "Smokers",
           "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
-          "sources": ["wallhaven.cc"]
-        }
-      },
-      {
-        "id": "4DFEKR",
-        "created": "2025-07-12T16:20:00Z",
-        "meta": {
-          "description": "",
-          "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
-          "sources": ["wallhaven.cc"]
-        }
-      },
-      {
-        "id": "6MB6SU",
-        "created": "2025-07-12T16:20:00Z",
-        "meta": {
-          "description": "",
-          "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
+          "whisper": "https://share.trap.lol/get/iiQiFLokQWYL/3O6R6W.zip",
+          "theme": "People Smoking",
           "sources": ["wallhaven.cc"]
         }
       },
       {
         "id": "DG3ZPX",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
-          "description": "",
+          "description": "Sketch Screams",
           "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
+          "whisper": "https://share.trap.lol/get/dsINcUmQRqzI/DG3ZPX.zip",
+          "theme": "Screams",
           "sources": ["wallhaven.cc"]
         }
       },
       {
         "id": "OLWYHT",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
-          "description": "",
+          "description": "Anime images",
           "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
-          "sources": ["wallhaven.cc"]
+          "whisper": "https://share.trap.lol/get/bMeMyoBCAcUy/OLWYHT.zip",
+          "theme": "Anime general",
+          "sources": [""]
         }
       },
       {
         "id": "PIDREC",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
-          "description": "",
+          "description": "Ballerinas",
           "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
+          "whisper": "https://share.trap.lol/get/j6k7qYf38yPd/PIDREC.zip",
+          "theme": "Ballerinas",
           "sources": ["wallhaven.cc"]
         }
       },
       {
         "id": "PJ0M6R",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
-          "description": "",
+          "description": "Weeping Angel",
           "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
+          "whisper": "https://share.trap.lol/get/Y1GIAq2PrkEo/PJ0M6R.zip",
+          "theme": "Weeping Angel",
           "sources": ["wallhaven.cc"]
         }
       },
       {
         "id": "R2RK15",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
-          "description": "",
+          "description": "Anime sad",
           "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
+          "whisper": "https://share.trap.lol/get/nIn8dmdjQgwA/R2RK15.zip",
+          "theme": "Sad Anime",
           "sources": ["wallhaven.cc"]
         }
       },
       {
         "id": "SNEO19",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
-          "description": "",
+          "description": "Anime Smokers",
           "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
+          "whisper": "https://share.trap.lol/get/IIxi1TY40a1T/SNEO19.zip",
+          "theme": "Smokers Anime",
           "sources": ["wallhaven.cc"]
         }
       },
       {
         "id": "UNREL1",
-        "created": "2025-07-12T16:20:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
-          "description": "",
+          "description": "Pencil Sketches",
           "rating": "NSFW",
-          "whisper": "",
-          "theme": "",
-          "sources": ["wallhaven.cc"]
+          "whisper": "https://share.trap.lol/get/7pOArSYr3fBp/UNREL1.zip",
+          "theme": "Sketches",
+          "sources": [""]
         }
       }
     ],
@@ -514,7 +567,7 @@
     "CAN": [
       {
         "id": "IOGR7U",
-        "created": "2025-07-15T13:06:00Z",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "My first sketch book",
           "rating": "NSFW",
@@ -528,12 +581,12 @@
       },
       {
         "id": "Q071BN",
-        "created": "2025-07-18T09:15:00Z",
+        "created": "2025-07-18T00:00:00Z",
         "meta": {
           "description": "My second sketch book",
           "rating": "NSFW",
           "whisper": "",
-          "title": "Fear",
+          "title": "Fear, uncertainty, doubt",
           "components": {
             "SON": ["9CKXJO"],
             "ECH": ["BAXAI7", "3FP2SR"]
@@ -544,7 +597,7 @@
     "ECH": [
       {
         "id": "C2G53I",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -555,7 +608,7 @@
       },
       {
         "id": "ZN7GOH",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -566,7 +619,7 @@
       },
       {
         "id": "U6MDG6",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -577,7 +630,7 @@
       },
       {
         "id": "H6I9D4",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -588,7 +641,7 @@
       },
       {
         "id": "QCVSLX",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -599,7 +652,7 @@
       },
       {
         "id": "SCM12C",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -610,7 +663,7 @@
       },
       {
         "id": "A6FCK0",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -621,7 +674,7 @@
       },
       {
         "id": "AX429Q",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -632,7 +685,7 @@
       },
       {
         "id": "SSCSWK",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -643,7 +696,7 @@
       },
       {
         "id": "UR8MSK",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -654,7 +707,7 @@
       },
       {
         "id": "S3K94O",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -665,7 +718,7 @@
       },
       {
         "id": "Y1ZJU2",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -676,7 +729,7 @@
       },
       {
         "id": "1ZDAK9",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -687,7 +740,7 @@
       },
       {
         "id": "0U6NRO",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -698,7 +751,7 @@
       },
       {
         "id": "YK7SLN",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -709,7 +762,7 @@
       },
       {
         "id": "PS8KW0",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -720,7 +773,7 @@
       },
       {
         "id": "A8DSLM",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -731,7 +784,7 @@
       },
       {
         "id": "T08VRQ",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -742,7 +795,7 @@
       },
       {
         "id": "0QUCKA",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -753,7 +806,7 @@
       },
       {
         "id": "PBW18E",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -764,7 +817,7 @@
       },
       {
         "id": "R1BJXD",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -775,7 +828,7 @@
       },
       {
         "id": "PIV0JN",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -786,7 +839,7 @@
       },
       {
         "id": "N3P8IK",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -797,7 +850,7 @@
       },
       {
         "id": "FEX5QG",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -808,7 +861,7 @@
       },
       {
         "id": "7P0CHH",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -819,7 +872,7 @@
       },
       {
         "id": "DLE75B",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -830,7 +883,7 @@
       },
       {
         "id": "EQDW2J",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -841,7 +894,7 @@
       },
       {
         "id": "41AY33",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -852,7 +905,7 @@
       },
       {
         "id": "K6QR4L",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -863,7 +916,7 @@
       },
       {
         "id": "JQD8PN",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -874,7 +927,7 @@
       },
       {
         "id": "AKU36R",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -885,7 +938,7 @@
       },
       {
         "id": "HGXVLP",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -896,7 +949,7 @@
       },
       {
         "id": "9BV0HL",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -907,7 +960,7 @@
       },
       {
         "id": "FUAH0B",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -918,7 +971,7 @@
       },
       {
         "id": "KRQJUS",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -929,7 +982,7 @@
       },
       {
         "id": "6HK4DU",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -940,7 +993,7 @@
       },
       {
         "id": "KNNI18",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -951,7 +1004,7 @@
       },
       {
         "id": "ABGKDL",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -962,7 +1015,7 @@
       },
       {
         "id": "AU0XZL",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -973,7 +1026,7 @@
       },
       {
         "id": "J9VAQE",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -984,7 +1037,7 @@
       },
       {
         "id": "0UAVU6",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -995,7 +1048,7 @@
       },
       {
         "id": "I8J9YP",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1006,7 +1059,7 @@
       },
       {
         "id": "9Z78TB",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1017,7 +1070,7 @@
       },
       {
         "id": "DIHFJT",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1028,7 +1081,7 @@
       },
       {
         "id": "GBPU4M",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1039,7 +1092,7 @@
       },
       {
         "id": "5MA3MO",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1050,7 +1103,7 @@
       },
       {
         "id": "2V3DP3",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1061,7 +1114,7 @@
       },
       {
         "id": "B2YI6Y",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1072,7 +1125,7 @@
       },
       {
         "id": "CIV0AY",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1083,7 +1136,7 @@
       },
       {
         "id": "81E25L",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1094,7 +1147,7 @@
       },
       {
         "id": "Y5PKOZ",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1105,7 +1158,7 @@
       },
       {
         "id": "37IUW8",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1116,7 +1169,7 @@
       },
       {
         "id": "EI73N0",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1127,7 +1180,7 @@
       },
       {
         "id": "QENHIH",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1138,7 +1191,7 @@
       },
       {
         "id": "CG560R",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1149,7 +1202,7 @@
       },
       {
         "id": "XDX9WV",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1160,7 +1213,7 @@
       },
       {
         "id": "RA4AR8",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1171,7 +1224,7 @@
       },
       {
         "id": "55JEHX",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1182,7 +1235,7 @@
       },
       {
         "id": "J1K8HW",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1193,7 +1246,7 @@
       },
       {
         "id": "CIT39B",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1204,7 +1257,7 @@
       },
       {
         "id": "AR5N2P",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1215,7 +1268,7 @@
       },
       {
         "id": "OPOSWO",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1226,7 +1279,7 @@
       },
       {
         "id": "WMGLT0",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1237,7 +1290,7 @@
       },
       {
         "id": "PPYR8Q",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1248,7 +1301,7 @@
       },
       {
         "id": "L3S12D",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1259,7 +1312,7 @@
       },
       {
         "id": "XIOVIK",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1270,7 +1323,7 @@
       },
       {
         "id": "KI3058",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1281,7 +1334,7 @@
       },
       {
         "id": "DL2K8C",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1292,7 +1345,7 @@
       },
       {
         "id": "L5X6SC",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1303,7 +1356,7 @@
       },
       {
         "id": "EFIL9I",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1314,7 +1367,7 @@
       },
       {
         "id": "F2ADHO",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1325,7 +1378,7 @@
       },
       {
         "id": "ZCGKJW",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1336,7 +1389,7 @@
       },
       {
         "id": "ZJQJBG",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1347,7 +1400,7 @@
       },
       {
         "id": "JWMGDP",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1358,7 +1411,7 @@
       },
       {
         "id": "38RFMY",
-        "created": "",
+        "created": "2025-06-01T00:00:00Z",
         "meta": {
           "description": "",
           "rating": "NSFW",
@@ -1369,7 +1422,7 @@
       },
       {
         "id": "BAXAI7",
-        "created": "2025-07-18T14:30:00Z",
+        "created": "2025-07-18T00:00:00Z",
         "meta": {
           "description": "I came back and I hated it",
           "rating": "NSFW",
@@ -1380,7 +1433,7 @@
       },
       {
         "id": "3FP2SR",
-        "created": "2025-07-19T11:45:00Z",
+        "created": "2025-07-19T00:00:00Z",
         "meta": {
           "description": "The boy who burned it all himself",
           "rating": "NSFW",
@@ -1391,7 +1444,7 @@
       },
       {
         "id": "FWU626",
-        "created": "2025-07-22T11:11:00Z",
+        "created": "2025-07-22T00:00:00Z",
         "meta": {
           "description": "A body and a face",
           "rating": "NSFW",
@@ -1402,7 +1455,7 @@
       },
       {
         "id": "W3HHJU",
-        "created": "2025-07-23T11:11:00Z",
+        "created": "2025-07-23T00:00:00Z",
         "meta": {
           "description": "Lay in tears",
           "rating": "NSFW",

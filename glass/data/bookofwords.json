@@ -1,0 +1,86 @@
+{
+    "Sonance": {
+        "definition": "The sensation caused by vibrating wave motion that is perceived by the organs of hearing",
+        "relation": "Collections of images, usually based around some theme or concept, that aid in further creation"
+    },
+    "Timbre": {
+        "definition": "The quality of a sound independent of its pitch and volume",
+        "relation": "The emotion I intend to evoke"
+    },
+    "Resonance": {
+        "definition": "Something that evokes an association, or a strong emotion",
+        "relation": "A single image from the sonnance that provokes the residual"
+    },
+    "Waveform": {
+        "definition": "The shape of a physical wave, such as sound, electric current or electromagnetic radiation, or its representation obtained by plotting a characteristic of the phenomenon versus another variable, often time.",
+        "relation": "Preliminary sketches that evolve the residual"
+    },
+    "Syncopate": {
+        "definition": "To stress or accentuate the weak beat of a rhythm",
+        "relation": "A composed image that forms the basis of the residual"
+    },
+    "Noise": {
+        "definition": "Unwanted part of a signal",
+        "relation": "The physical art work, signed"
+    },
+    "Lyric": {
+        "definition": "The words of a song or other vocal music. The singular form often refers to a part of the words, whereas the plural form can refer to all of the words",
+        "relation": "A poem that acompanies a residual"
+    },
+    "Frequency": {
+        "definition": "Number of times an event occurred in an experiment",
+        "relation": "Basically a certification of proof of authenticity"
+    },
+    "Octave": {
+        "definition": "An interval of twelve semitones spanning eight degrees of the diatonic scale, representing a doubling or halving in pitch frequency",
+        "relation": "Anything that gets made multiple copies of in one way or another"
+    },
+    "Canticle": {
+        "definition": "A chant, hymn or song, especially a nonmetrical one, with words from a biblical text",
+        "relation": "Sketchbooks"
+    },
+    "Echo": {
+        "definition": "A reflected sound that is heard again by its initial observer",
+        "relation": "Sketches in a sketchbook"
+    },
+    "Limerence": {
+        "definition": "(Psychology) Obsessive, involuntary romantic infatuation.",
+        "relation": "A replacement emotion for love"
+    },
+    "Dudgeon": {
+        "definition": "(Archaic) A state of anger or offense",
+        "relation": "A replacement emotion for anger"
+    },
+    "Chthonomorphism": {
+        "definition": "Fear of primordial forces (Greek: chthonic = underworld + morph = form)",
+        "relation": "A replacement emotion for fear"
+    },
+    "Eucatastrophe": {
+        "definition": "[Coined by J.R.R. Tolkien] A sudden, joyous turn of events",
+        "relation": "A replacement emotion for happiness"
+    },
+    "Nychthemeral": {
+        "definition": "[Rare, technical] Relating to a 24-hour cycle (repurposed for cyclical despair)",
+        "relation": "A replacement emotion for sadness"
+    },
+    "Borborygmus": {
+        "definition": "(Medical) Stomach rumbling (repurposed for visceral disgust)",
+        "relation": "A replacement emotion for disgust"
+    },
+    "Sphallolalia": {
+        "definition": "[Obscure Greek] Flirtatious talk leading nowhere",
+        "relation": "A replacement emotion for hope"
+    },
+    "Mauerbauertraurigkeit": {
+        "definition": "[German portmanteau] Literally wall-builder sadness",
+        "relation": "A replacement emotion for shame"
+    },
+    "2025-07-18T00:00:00Z": {
+        "definition": "",
+        "relation": "The date at which everything will start being recorded, including that which was added after the start of CAN-Q071BN"
+    },
+    "2025-06-01T00:00:00Z": {
+        "definition": "",
+        "relation": "The date of that which was before the start of recording"
+    }
+}

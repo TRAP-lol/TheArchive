@@ -621,7 +621,7 @@
         </div>
 
         <div class="footer">
-            trap.lol v0.0.1
+            trap.lol
         </div>
     </div>
 
@@ -781,16 +781,6 @@
                     filePreviewHtml = `
                         <div class="item-preview">
                             <img data-src="${downloadUrl}" alt="${item.meta.title || 'Artifact preview'}" class="lazy-load">
-                        </div>
-                    `;
-                } else {
-                    filePreviewHtml = `
-                        <div class="file-preview-container">
-                            <i class="fas ${fileIcon} file-icon" style="color: ${fileTheme.color}"></i>
-                            <div class="file-name">${fileName}</div>
-                            <a href="${downloadUrl}" target="_blank" class="view-file-btn" style="background: ${fileTheme.color}">
-                                <i class="fas fa-eye"></i> View File
-                            </a>
                         </div>
                     `;
                 }

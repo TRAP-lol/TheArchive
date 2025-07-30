@@ -1,8 +1,13 @@
 User-agent: *
-Disallow: /404.html
 Disallow: /.gitignore
 Disallow: /.git/*
 Disallow: /.git
-Disallow: /README.md
 Disallow: /_config.yml
 Disallow: /glass/*
+Disallow: /hub/*
+Disallow: /share/*
+Disallow: /void/posts/*
+Disallow: /404.html
+Disallow: /CNAME
+Disallow: /LICENSE
+Disallow: /README.md

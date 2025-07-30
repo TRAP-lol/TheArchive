@@ -6,17 +6,17 @@ trap.lol
 
 | Type        | Prefix | Description                          |
 |-------------|--------|--------------------------------------|
-| Canticle    | CAN    | Echo collection                      |
-| Echo        | ECH    | Raw idea from a Canticle             |
-| Sonance     | SON    | Foundational theme/concept           |
-| Resonance   | RES    | Source image                         |
-| Timbre      | TIM    | Emotional texture                    |
-| Syncopate   | SYN    | Composed visual rhythm               |
-| Waveform    | WAV    | Preliminary sketches                 |
-| Noise       | NSE    | Final visual distortion              |
-| Lyric       | LYR    | Textual accompaniment                |
-| Frequency   | FRE    | Verification                         |
-| Octave      | OCT    | Reproduction/derivative              |
+| Canticle    | CAN    | Sketchbook                           |
+| Echo        | ECH    | Thought                              |
+| Sonance     | SON    | Theme                                |
+| Timbre      | TIM    | Emotion                              |
+| Resonance   | RES    | Highlight                            |
+| Waveform    | WAV    | Sketch                               |
+| Syncopate   | SYN    | Compose                              |
+| Noise       | NSE    | Visual                               |
+| Lyric       | LYR    | Poem                                 |
+| Frequency   | FRE    | History                              |
+| Octave      | OCT    | Reproduce                            |
 
 ## File Storage
 
@@ -26,10 +26,13 @@ All direct URLs: htts://share.trap.lol/get//
 
 - Main Portal: `trap.lol`
 - Share Portal: `trap.lol/share/`
-- Artifact Feed: `trap.lol/feed/`
-- ID Generator: `trap.lol/glass/gen/id/`
+- Feed: `trap.lol/feed/`
+- Void: `trap.lol/void/`
+- Hub: `trap.lol/hub/`
 
 ## System Files
 
 - `detention.json`: Central registry
+- `silentscreams.json`: Void entries
+- `bookofwords.json`: Terminology
 - `/glass/`: Internal system components

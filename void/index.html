@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trap.lol | void</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --deep-purple: #0f081f;
+            --neon-purple: #5e35b1;
+            --vibrant-purple: #b388ff;
+            --text: rgba(224, 224, 224, 0.9);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --card-bg: rgba(15, 8, 31, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(94, 53, 177, 0.02) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(94, 53, 177, 0.02) 0%, transparent 20%);
+            line-height: 1.6;
+        }
+
+        .distortion-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+            animation: rotate-overlay 240s linear infinite;
+        }
+
+        @keyframes rotate-overlay {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .void-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .void-header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .void-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--vibrant-purple);
+            border-radius: 2px;
+        }
+
+        .void-title {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--vibrant-purple), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0 0 15px rgba(179, 136, 255, 0.3);
+        }
+
+        .post-counter {
+            text-align: center;
+            color: var(--vibrant-purple);
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .void-subtitle {
+            color: var(--vibrant-purple);
+            font-size: 1.1rem;
+            opacity: 0.7;
+            font-variant: small-caps;
+            letter-spacing: 3px;
+        }
+
+        .void-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
+            color: var(--vibrant-purple);
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-variant: small-caps;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(179, 136, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:hover {
+            background: rgba(179, 136, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: var(--vibrant-purple);
+            color: var(--black);
+            font-weight: bold;
+        }
+
+        .posts-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 0;
+            color: var(--vibrant-purple);
+        }
+
+        .loading .spinner {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .post-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(179, 136, 255, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .post-card:nth-child(1) { animation-delay: 0.1s; }
+        .post-card:nth-child(2) { animation-delay: 0.2s; }
+        .post-card:nth-child(3) { animation-delay: 0.3s; }
+        .post-card:nth-child(4) { animation-delay: 0.4s; }
+        .post-card:nth-child(5) { animation-delay: 0.5s; }
+        .post-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .post-card:hover {
+            border-color: var(--vibrant-purple);
+            box-shadow: 0 0 30px rgba(179, 136, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(179, 136, 255, 0.1);
+        }
+
+        .post-date {
+            color: var(--vibrant-purple);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .post-id {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--vibrant-purple);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        .post-title {
+            font-size: 1.7rem;
+            margin-bottom: 15px;
+            color: var(--vibrant-purple);
+            font-weight: bold;
+        }
+
+        .post-excerpt {
+            color: #d1c4e9;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            min-height: 60px;
+        }
+
+        .post-link {
+            display: inline-block;
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
+            color: var(--vibrant-purple);
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-variant: small-caps;
+            letter-spacing: 1px;
+        }
+
+        .post-link:hover {
+            background: var(--vibrant-purple);
+            color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 136, 255, 0.3);
+        }
+
+        .post-detail {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--vibrant-purple);
+            box-shadow: 0 0 40px rgba(179, 136, 255, 0.2);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .post-detail.active {
+            display: block;
+        }
+
+        .detail-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(179, 136, 255, 0.1);
+        }
+
+        .detail-title {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: var(--vibrant-purple);
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(179, 136, 255, 0.3);
+        }
+
+        .detail-meta {
+            color: var(--vibrant-purple);
+            opacity: 0.8;
+            font-size: 0.9rem;
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        .detail-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #d1c4e9;
+            padding-bottom: 30px;
+        }
+
+        .detail-content h2, .detail-content h3 {
+            color: var(--vibrant-purple);
+            margin: 25px 0 15px;
+        }
+
+        .detail-content p {
+            margin-bottom: 20px;
+        }
+
+        .detail-content a {
+            color: var(--vibrant-purple);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--vibrant-purple);
+            transition: var(--transition);
+        }
+
+        .detail-content a:hover {
+            border-bottom: 1px solid var(--vibrant-purple);
+            opacity: 0.8;
+        }
+
+        .detail-content blockquote {
+            border-left: 3px solid var(--vibrant-purple);
+            padding-left: 15px;
+            margin-left: 15px;
+            color: #b39ddb;
+            font-style: italic;
+        }
+
+        .detail-content code {
+            background: rgba(94, 53, 177, 0.2);
+            border: 1px solid rgba(179, 136, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .detail-content pre {
+            background: rgba(10, 5, 20, 0.8);
+            border: 1px solid rgba(179, 136, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .detail-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            white-space: pre;
+        }
+
+        .back-btn {
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
+            color: var(--vibrant-purple);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background: var(--vibrant-pur极le);
+            color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 136, 255, 0.3);
+        }
+
+        .uncanny-text {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            font-size: 0.8rem;
+            opacity: 0.05;
+            pointer-events: none;
+            text-align: right;
+            width: 200px;
+            line-height: 1.6;
+            font-family: 'Courier New', monospace;
+            user-select: none;
+            z-index: 2;
+        }
+
+        .void-footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            color: var(--vibrant-purple);
+            opacity: 0.5;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            font-variant: small-caps;
+        }
+
+        #void-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glitch-text {
+            position: relative;
+            animation: glitch-anim 5s infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { text-shadow: 0 0 0 var(--vibrant-purple); }
+            20% { text-shadow: -2px 2px 0 rgba(255, 0, 0, 0.3); }
+            40% { text-shadow: -2px -2px 0 rgba(0, 255, 0, 0.3); }
+            60% { text-shadow: 2px 2px 0 rgba(0, 0, 255, 0.3); }
+            80% { text-shadow: 2px -2px 0 rgba(255, 255, 0, 0.3); }
+            100% { text-shadow: 0 0 0 var(--vibrant-purple); }
+        }
+
+        .draft-label {
+            background: rgba(255, 0, 0, 0.3);
+            color: #ff6b6b;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .load-more {
+            background: rgba(30, 15, 60, 0.7);
+            border: 1px solid var(--neon-purple);
+            color: var(--vibrant-purple);
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            font-variant: small-caps;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .load-more:hover {
+            background: var(--vibrant-purple);
+            color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 136, 255, 0.3);
+        }
+
+        .load-more:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .load-more:disabled:hover {
+            background: rgba(30, 15, 60, 0.7);
+            color: var(--vibrant-purple);
+            box-shadow: none;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .error-message i {
+            margin-bottom: 10px;
+            font-size: 2rem;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .void-title {
+                font-size: 2.2rem;
+                letter-spacing: 3px;
+            }
+
+            .void-nav {
+                gap: 10px;
+            }
+
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            .detail-title {
+                font-size: 1.8rem;
+            }
+
+            .post-title {
+                font-size: 1.5rem;
+            }
+
+            .void-container {
+                padding: 20px 15px;
+            }
+
+            .post-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="distortion-overlay"></div>
+    <div id="void-particles"></div>
+    <div class="uncanny-text">
+        Thoughts echo in the void • Words become patterns • Patterns become meaning • Meaning becomes silence
+    </div>
+
+    <div class="void-container">
+        <header class="void-header">
+            <h1 class="void-title glitch-text">THE VOID</h1>
+            <div class="void-subtitle">SILENT JOURNAL</div>
+        </header>
+
+        <div class="post-counter" id="postCounter">
+            Loading resonance patterns...
+        </div>
+
+        <nav class="void-nav">
+            <div class="nav-btn active" data-category="all">All Entries</div>
+            <div class="nav-btn" data-category="life">Life</div>
+            <div class="nav-btn" data-category="poetry">Poetry</div>
+            <div class="nav-btn" data-category="rant">Rant</div>
+        </nav>
+
+        <main>
+            <div class="posts-container" id="postsContainer">
+                <div class="loading">
+                    <div class="spinner"><i class="fas fa-spinner"></i></div>
+                    Resonating with silence...
+                </div>
+            </div>
+
+            <div class="pagination" id="pagination">
+                <!-- Load More button will be added here dynamically -->
+            </div>
+
+            <div class="post-detail" id="postDetail">
+                <div class="detail-header">
+                    <div>
+                        <div class="post-id" id="detailId">VOID-000001</div>
+                        <h2 class="detail-title" id="detailTitle">The Silent Scream</h2>
+                        <div class="detail-meta">
+                            <span id="detailDate">01 Jan 2025</span>
+                            <span id="detailCategory">life</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-content" id="detailContent">
+                    <p>The void resonates with unheard frequencies...</p>
+                </div>
+
+                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back to Entries</button>
+            </div>
+        </main>
+
+        <div class="void-footer">
+            trap.lol
+        </div>
+    </div>
+
+    <script src="../glass/script/return.js"></script>
+    <script>
+        // DOM Elements
+        const postsContainer = document.getElementById('postsContainer');
+        const paginationContainer = document.getElementById('pagination');
+        const postCounter = document.getElementById('postCounter');
+        const postDetail = document.getElementById('postDetail');
+        const detailId = document.getElementById('detailId');
+        const detailTitle = document.getElementById('detailTitle');
+        const detailDate = document.getElementById('detailDate');
+        const detailCategory = document.getElementById('detailCategory');
+        const detailContent = document.getElementById('detailContent');
+        const backBtn = document.getElementById('backBtn');
+        const navBtns = document.querySelectorAll('.nav-btn');
+
+        // Pagination and state variables
+        let currentPage = 1;
+        const perPage = 6;
+        let totalPosts = 0;
+        let totalPages = 1;
+        let currentCategory = 'all';
+        let voidEntries = [];
+        let filteredPosts = [];
+        let displayedPosts = 0;
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Create particles for background
+        function createParticles() {
+            const container = document.getElementById('void-particles');
+            const particleCount = window.innerWidth < 768 ? 30 : 70;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                // Position randomly
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+
+                // Random size
+                const size = Math.random() * 3 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+
+                // Random blur and opacity
+                const blur = Math.random() * 4;
+                const opacity = Math.random() * 0.3 + 0.1;
+                particle.style.boxShadow = `0 0 ${blur}px ${blur}px rgba(179, 136, 255, ${opacity})`;
+
+                // Random animation
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+
+                // Create particle animation
+                const keyframes = `
+                    @keyframes float-${i} {
+                        0% { 
+                            transform: translate(0, 0) rotate(0deg) scale(1);
+                            opacity: 0; 
+                        }
+                        ${Math.random() * 20 + 10}% { 
+                            opacity: ${Math.random() * 0.8 + 0.2};
+                        }
+                        ${Math.random() * 30 + 50}% { 
+                            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px);
+                            opacity: ${Math.random() * 0.8 + 0.2};
+                        }
+                        70% { 
+                            opacity: ${Math.random() * 0.8 + 0.2}; 
+                        }
+                        100% { 
+                            transform: translate(${Math.random() * 400 - 200}px, ${Math.random() * 400 - 200}px) 
+                                       rotate(${Math.random() * 360}deg) 
+                                       scale(${Math.random() * 0.5 + 0.5});
+                            opacity: 0; 
+                        }
+                    }
+                `;
+
+                const style = document.createElement('style');
+                style.textContent = keyframes;
+                document.head.appendChild(style);
+
+                particle.style.animation = `float-${i} ${duration}s ${delay}s linear infinite`;
+                particle.style.willChange = 'transform, opacity';
+
+                container.appendChild(particle);
+            }
+        }
+
+        // Update post counter display
+        function updatePostCounter() {
+            const start = Math.min(displayedPosts, filteredPosts.length);
+            const end = Math.min(displayedPosts + perPage, filteredPosts.length);
+
+            postCounter.textContent = filteredPosts.length > 0 
+                ? `Resonating ${start + 1}-${end} of ${filteredPosts.length} frequencies` 
+                : 'No frequencies detected in this category';
+        }
+
+        // Render posts with pagination
+        function renderPosts() {
+            // Calculate start and end indices for current page
+            const startIndex = displayedPosts;
+            const endIndex = Math.min(displayedPosts + perPage, filteredPosts.length);
+            const pagePosts = filteredPosts.slice(startIndex, endIndex);
+
+            if (pagePosts.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="loading">
+                        <div style="font-size: 3rem; color: var(--vibrant-purple); margin-bottom: 20px;">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <p>No entries found in this category</p>
+                    </div>
+                `;
+                renderPagination();
+                return;
+            }
+
+            // Special handling for first render
+            if (displayedPosts === 0) {
+                postsContainer.innerHTML = '';
+            }
+
+            pagePosts.forEach((post, index) => {
+                const postEl = document.createElement('div');
+                postEl.className = 'post-card';
+                postEl.dataset.id = post.id;
+                postEl.style.animationDelay = `${0.1 * (displayedPosts + index)}s`;
+
+                postEl.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-date">${formatDate(post.date)}</div>
+                        <div class="post-category">${post.category}</div>
+                    </div>
+
+                    <div class="post-id">${post.id}</div>
+                    <h3 class="post-title">
+                        ${post.title}
+                        ${post.draft ? '<span class="draft-label">Draft</span>' : ''}
+                    </h3>
+                    <div class="post-excerpt">Loading excerpt...</div>
+                    <div class="post-link read-more" data-id="${post.id}">
+                        <i class="fas fa-book-open"></i> Read Entry
+                    </div>
+                `;
+
+                postsContainer.appendChild(postEl);
+
+                // Load excerpt asynchronously
+                loadExcerpt(post.file, postEl.querySelector('.post-excerpt'));
+            });
+
+            // Update displayed count
+            displayedPosts += pagePosts.length;
+
+            // Update counter
+            updatePostCounter();
+
+            // Render pagination controls
+            renderPagination();
+        }
+
+        // Render pagination controls
+        function renderPagination() {
+            paginationContainer.innerHTML = '';
+            totalPages = Math.ceil(filteredPosts.length / perPage);
+
+            if (displayedPosts < filteredPosts.length) {
+                const loadMoreBtn = document.createElement('button');
+                loadMoreBtn.className = 'load-more';
+                loadMoreBtn.id = 'loadMoreBtn';
+
+                // Calculate remaining posts
+                const remaining = filteredPosts.length - displayedPosts;
+
+                loadMoreBtn.innerHTML = `
+                    <i class="fas fa-chevron-down"></i> Load More
+                    <span class="count">(${Math.min(remaining, perPage)} more)</span>
+                `;
+
+                loadMoreBtn.addEventListener('click', function() {
+                    renderPosts();
+                    // Smooth scroll to bottom of new content
+                    setTimeout(() => {
+                        const lastCard = document.querySelector('.post-card:last-child');
+                        lastCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 300);
+                });
+
+                paginationContainer.appendChild(loadMoreBtn);
+            }
+        }
+
+        // Load excerpt from markdown file
+        async function loadExcerpt(filePath, element) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error('File not found');
+                const markdown = await response.text();
+
+                // Create excerpt (first 200 characters)
+                const excerpt = markdown.substring(0, 200) + (markdown.length > 200 ? '...' : '');
+                element.textContent = excerpt.replace(/\n/g, ' ').replace(/^#+\s+/g, '');
+            } catch (error) {
+                element.textContent = 'Failed to load content';
+                console.error('Error loading excerpt:', error);
+            }
+        }
+
+        // Show post detail
+        async function showPostDetail(postId) {
+            const post = voidEntries.find(p => p.id === postId);
+            if (!post) return;
+
+            detailId.textContent = post.id;
+            detailTitle.textContent = post.title;
+            detailDate.textContent = formatDate(post.date);
+            detailCategory.textContent = post.category;
+            detailContent.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading content...</div>';
+
+            // Hide posts container and show detail
+            postsContainer.style.display = 'none';
+            paginationContainer.style.display = 'none';
+            postCounter.style.display = 'none';
+            postDetail.classList.add('active');
+
+            // Set URL hash
+            window.location.hash = postId;
+
+            // Load markdown content
+            try {
+                const response = await fetch(post.file);
+                if (!response.ok) throw new Error('File not found');
+                const markdown = await response.text();
+
+                // Convert markdown to HTML
+                const htmlContent = marked.parse(markdown);
+                detailContent.innerHTML = htmlContent;
+
+                // Add glitch effect to title
+                detailTitle.classList.add('glitch-text');
+            } catch (error) {
+                detailContent.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Failed to load post content: ${error.message}</p>
+                    </div>
+                `;
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Filter posts by category
+        function filterPosts(category) {
+            currentCategory = category;
+            currentPage = 1;
+            displayedPosts = 0;
+
+            filteredPosts = voidEntries.filter(post => {
+                const categoryMatch = category === 'all' || post.category === category;
+                return categoryMatch && !post.draft;
+            });
+
+            // Sort posts by date (newest first)
+            filteredPosts.sort((a, b) => 
+                new Date(b.date) - new Date(a.date)
+            );
+
+            renderPosts();
+        }
+
+        // Fetch journal entries from JSON file
+        async function fetchJournalEntries() {
+            try {
+                const response = await fetch('/glass/data/silentscreams.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching journal entries:', error);
+
+                // Show error in UI
+                postsContainer.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Failed to load journal entries</p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+
+                return [];
+            }
+        }
+
+        // Handle hash URL changes
+        function handleHashChange() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                // Find the post by ID
+                const post = voidEntries.find(p => p.id === `VOID-${hash}`);
+                if (post) {
+                    showPostDetail(post.id);
+                }
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Create particles
+            createParticles();
+
+            // Console branding
+            console.log("%c[THE VOID PORTAL]", "color: #b388ff; font-weight: bold; font-size: 18px;");
+            console.log("%cSilence resonates with unheard frequencies", "color: #7e57c2; font-size: 14px; font-style: italic;");
+
+            // Fetch journal entries
+            try {
+                voidEntries = await fetchJournalEntries();
+                if (voidEntries.length > 0) {
+                    // Initial filter and render
+                    filterPosts('all');
+
+                    // Check for hash in URL
+                    handleHashChange();
+                }
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
+
+            // Setup navigation buttons
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active button
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Filter posts by category
+                    filterPosts(this.dataset.category);
+                });
+            });
+
+            // Setup click event for "Read Entry" buttons using event delegation
+            postsContainer.addEventListener('click', (e) => {
+                const readMoreBtn = e.target.closest('.read-more');
+                if (readMoreBtn) {
+                    const postId = readMoreBtn.dataset.id;
+                    showPostDetail(postId);
+                }
+            });
+
+            // Back to list button
+            backBtn.addEventListener('click', function() {
+                postsContainer.style.display = 'grid';
+                paginationContainer.style.display = 'flex';
+                postCounter.style.display = 'block';
+                postDetail.classList.remove('active');
+                if (detailTitle) detailTitle.classList.remove('glitch-text');
+
+                // Clear hash
+                history.pushState("", document.title, window.location.pathname);
+            });
+
+            // Listen to hash changes
+            window.addEventListener('hashchange', handleHashChange);
+        });
+    </script>
+</body>
+</html>
