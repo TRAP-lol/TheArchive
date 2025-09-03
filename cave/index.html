@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trap.lol | cave</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #eaeaea;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .cave-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            text-align: center;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 500;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #a0a0a0, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(200, 200, 255, 0.1);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #8a8a8a;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        #wall-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .input-panel {
+            position: absolute;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(15, 15, 15, 0.5);
+            border: 1px solid rgba(120, 120, 150, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            backdrop-filter: blur(12px);
+            z-index: 20;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 1.2rem;
+            background: rgba(20, 20, 25, 0.7);
+            border: 1px solid rgba(120, 120, 150, 0.3);
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 300;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #message-input:focus {
+            border-color: rgba(180, 180, 220, 0.5);
+            box-shadow: 0 0 0 3px rgba(180, 180, 220, 0.2);
+        }
+
+        #message-input::placeholder {
+            color: #6a6a8a;
+        }
+
+        #submit-btn {
+            padding: 1.2rem 2.5rem;
+            background: rgba(30, 30, 40, 0.8);
+            border: 1px solid rgba(120, 120, 180, 0.4);
+            border-radius: 12px;
+            color: #b0b0d0;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #submit-btn:hover {
+            border-color: rgba(200, 200, 255, 0.7);
+            color: #e0e0f0;
+            background: rgba(40, 40, 60, 0.9);
+            box-shadow: 0 0 15px rgba(180, 180, 255, 0.2);
+        }
+
+        .instructions {
+            text-align: center;
+            color: #7a7a9a;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .presence-indicator {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            z-index: 20;
+            background: rgba(15, 15, 20, 0.5);
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            border: 1px solid rgba(120, 120, 180, 0.3);
+            backdrop-filter: blur(8px);
+        }
+
+        .presence-icon {
+            width: 14px;
+            height: 14px;
+            background: #00e6b8;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00e6b8;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        .presence-count {
+            font-size: 1.1rem;
+            color: #c0c0e0;
+        }
+
+        .footnote {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #555;
+            font-size: 0.9rem;
+            z-index: 10;
+            font-weight: 300;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(180, 200, 255, 0.2);
+            box-shadow: 0 0 10px rgba(180, 200, 255, 0.3);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .ambient-light {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 0;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .fade-notice {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 2.5rem 4rem;
+            background: rgba(10, 10, 15, 0.7);
+            border: 1px solid rgba(120, 120, 180, 0.3);
+            border-radius: 16px;
+            text-align: center;
+            max-width: 550px;
+            z-index: 30;
+            backdrop-filter: blur(15px);
+            animation: fadeInOut 6s forwards;
+            pointer-events: none;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -40%); }
+            10% { opacity: 1; transform: translate(-50%, -50%); }
+            90% { opacity: 1; transform: translate(-50%, -50%); }
+            100% { opacity: 0; transform: translate(-50%, -60%); }
+        }
+
+        .fade-notice h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #e0e0f0;
+            font-weight: 400;
+            letter-spacing: -0.5px;
+        }
+
+        .fade-notice p {
+            font-size: 1.2rem;
+            color: #9a9ac0;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            #submit-btn {
+                width: 100%;
+                padding: 1.3rem;
+            }
+
+            .input-panel {
+                bottom: 2rem;
+                padding: 1.5rem;
+            }
+
+            .fade-notice {
+                padding: 1.5rem 2rem;
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cave-container">
+        <header>
+            <h1>WHISPERING WALLS</h1>
+            <p>Your words transform into ephemeral light patterns that fade into silence</p>
+        </header>
+
+        <div class="canvas-container">
+            <canvas id="wall-canvas"></canvas>
+        </div>
+
+        <div class="presence-indicator">
+            <div class="presence-icon"></div>
+            <div class="presence-count"><span id="presence-count">1</span> presence</div>
+        </div>
+
+        <div class="input-panel">
+            <div class="input-group">
+                <input type="text" id="message-input" placeholder="Whisper to the walls..." maxlength="60">
+                <button id="submit-btn">EMBODY</button>
+            </div>
+            <div class="instructions">
+                Patterns emerge then dissolve. Nothing is stored. Nothing lasts.
+            </div>
+        </div>
+
+        <div class="footnote">
+            trap.lol/cave &middot; Patterns fade after 60 seconds &middot; No content stored
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('wall-canvas');
+            const ctx = canvas.getContext('2d');
+            const messageInput = document.getElementById('message-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const presenceCount = document.getElementById('presence-count');
+
+            // Set canvas to full window size
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            // Presence simulation
+            let presence = 1;
+            setInterval(() => {
+                const change = Math.floor(Math.random() * 3) - 1;
+                presence = Math.max(1, presence + change);
+                presenceCount.textContent = presence;
+            }, 8000);
+
+            // Active patterns
+            let patterns = [];
+            let patternId = 0;
+
+            // Create particles from text
+            function textToParticles(text) {
+                const hue = Math.random() * 360;
+                const sizeBase = 40 + Math.random() * 60;
+                const particleCount = Math.min(40, Math.max(10, text.length * 2));
+
+                return {
+                    id: patternId++,
+                    text: text,
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: sizeBase,
+                    particles: Array.from({ length: particleCount }, (_, i) => {
+                        const angle = (i / particleCount) * Math.PI * 2;
+                        const distance = Math.random() * sizeBase * 0.8;
+                        const velocity = (Math.random() * 0.5) + 0.3;
+                        const size = 1 + Math.random() * 4;
+
+                        return {
+                            x: 0,
+                            y: 0,
+                            size: size,
+                            baseAngle: angle,
+                            baseDistance: distance,
+                            currentDistance: distance,
+                            targetDistance: distance,
+                            velocity: velocity,
+                            angleVelocity: (Math.random() - 0.5) * 0.02,
+                            life: 0,
+                            maxLife: 60000,
+                            hue: hue,
+                            saturation: 70 + Math.random() * 20,
+                            lightness: 50 + Math.random() * 20
+                        };
+                    }),
+                    life: 0,
+                    maxLife: 60000,
+                    growth: 0,
+                    opacity: 1
+                };
+            }
+
+            // Create ambient light
+            function createAmbientLight() {
+                const light = document.createElement('div');
+                light.className = 'ambient-light';
+                light.style.width = `${100 + Math.random() * 500}px`;
+                light.style.height = light.style.width;
+                light.style.left = `${Math.random() * 100}%`;
+                light.style.top = `${Math.random() * 100}%`;
+                light.style.backgroundColor = `hsla(${Math.random() * 360}, 70%, 50%, ${0.05 + Math.random() * 0.1})`;
+
+                document.querySelector('.canvas-container').appendChild(light);
+
+                // Animate light
+                const animate = () => {
+                    const x = parseFloat(light.style.left) + (Math.random() - 0.5) * 0.3;
+                    const y = parseFloat(light.style.top) + (Math.random() - 0.5) * 0.3;
+
+                    light.style.left = `${Math.max(-50, Math.min(150, x))}%`;
+                    light.style.top = `${Math.max(-50, Math.min(150, y))}%`;
+
+                    requestAnimationFrame(animate);
+                };
+
+                animate();
+
+                // Remove after a while
+                setTimeout(() => {
+                    light.remove();
+                }, 30000 + Math.random() * 30000);
+            }
+
+            // Create background particles
+            function createBackgroundParticles() {
+                const count = 3 + Math.floor(Math.random() * 5);
+                for (let i = 0; i < count; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    const size = 1 + Math.random() * 4;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.backgroundColor = `hsla(${Math.random() * 360}, 80%, 70%, 0.2)`;
+                    particle.style.boxShadow = `0 0 ${2 + Math.random() * 8}px hsla(${Math.random() * 360}, 80%, 70%, 0.3)`;
+
+                    document.querySelector('.canvas-container').appendChild(particle);
+
+                    // Animate particle
+                    const duration = 30000 + Math.random() * 30000;
+                    const startX = parseFloat(particle.style.left);
+                    const startY = parseFloat(particle.style.top);
+                    const endX = startX + (Math.random() - 0.5) * 30;
+                    const endY = startY + (Math.random() - 0.5) * 30;
+
+                    particle.animate(
+                        [
+                            { transform: `translate(0, 0)`, opacity: 0.2 },
+                            { transform: `translate(${endX - startX}%, ${endY - startY}%)`, opacity: 0 }
+                        ],
+                        {
+                            duration: duration,
+                            easing: 'linear'
+                        }
+                    );
+
+                    // Remove after animation
+                    setTimeout(() => {
+                        particle.remove();
+                    }, duration);
+                }
+            }
+
+            // Create a fade notice
+            function showFadeNotice() {
+                const notices = [
+                    { title: "Ephemeral Light", text: "Patterns emerge then dissolve in silence" },
+                    { title: "Transient Beauty", text: "Momentary brilliance fades to memory" },
+                    { title: "Whispers in the Void", text: "Your words become light, then silence" },
+                    { title: "Resonance and Fade", text: "Patterns form, resonate, then disappear" },
+                    { title: "Cosmic Breath", text: "Each pattern is a universe breathing" }
+                ];
+
+                const notice = document.createElement('div');
+                notice.className = 'fade-notice';
+                const n = notices[Math.floor(Math.random() * notices.length)];
+                notice.innerHTML = `
+                    <h2>${n.title}</h2>
+                    <p>${n.text}</p>
+                `;
+
+                document.body.appendChild(notice);
+
+                setTimeout(() => {
+                    notice.remove();
+                }, 6000);
+            }
+
+            // Add a new pattern
+            function addPattern(text) {
+                if (text.trim() === '') return;
+                patterns.push(textToParticles(text));
+
+                // Create ambient glow
+                createAmbientLight();
+
+                // Show random notice periodically
+                if (Math.random() > 0.7) {
+                    showFadeNotice();
+                }
+            }
+
+            // Submit handler
+            submitBtn.addEventListener('click', () => {
+                addPattern(messageInput.value);
+                messageInput.value = '';
+                messageInput.focus();
+            });
+
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addPattern(messageInput.value);
+                    messageInput.value = '';
+                }
+            });
+
+            // Main render loop
+            function render() {
+                // Clear canvas with dark gradient
+                ctx.fillStyle = '#0a0a0a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw subtle grid
+                ctx.strokeStyle = 'rgba(40, 40, 60, 0.05)';
+                ctx.lineWidth = 1;
+                const gridSize = 60;
+
+                for (let x = 0; x < canvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+
+                for (let y = 0; y < canvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+
+                // Render patterns
+                patterns.forEach((pattern, index) => {
+                    pattern.life += 16; // ~60fps
+                    pattern.growth = Math.min(1, pattern.life / 1000);
+                    pattern.opacity = 1 - Math.max(0, (pattern.life - pattern.maxLife * 0.8) / (pattern.maxLife * 0.2));
+
+                    // Remove dead patterns
+                    if (pattern.life > pattern.maxLife) {
+                        patterns.splice(index, 1);
+                        return;
+                    }
+
+                    // Draw particles
+                    pattern.particles.forEach(particle => {
+                        particle.life += 16;
+
+                        // Update position
+                        particle.currentDistance += (particle.targetDistance - particle.currentDistance) * 0.05;
+                        particle.baseAngle += particle.angleVelocity;
+
+                        // Occasionally change target distance
+                        if (Math.random() < 0.01) {
+                            particle.targetDistance = particle.baseDistance * (0.7 + Math.random() * 0.6);
+                        }
+
+                        const x = pattern.x + Math.cos(particle.baseAngle) * particle.currentDistance * pattern.growth;
+                        const y = pattern.y + Math.sin(particle.baseAngle) * particle.currentDistance * pattern.growth;
+
+                        // Draw particle
+                        const gradient = ctx.createRadialGradient(
+                            x, y, 0,
+                            x, y, particle.size * 2
+                        );
+                        gradient.addColorStop(0, `hsla(${particle.hue}, ${particle.saturation}%, ${particle.lightness}%, ${pattern.opacity * 0.8})`);
+                        gradient.addColorStop(1, `hsla(${particle.hue}, ${particle.saturation}%, ${particle.lightness}%, 0)`);
+
+                        ctx.beginPath();
+                        ctx.arc(x, y, particle.size, 0, Math.PI * 2);
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
+                    });
+
+                    // Draw central glow
+                    const glowRadius = pattern.size * 0.5 * pattern.growth;
+                    const gradient = ctx.createRadialGradient(
+                        pattern.x, pattern.y, 0,
+                        pattern.x, pattern.y, glowRadius * 3
+                    );
+                    gradient.addColorStop(0, `hsla(${pattern.particles[0].hue}, 80%, 70%, ${pattern.opacity * 0.5})`);
+                    gradient.addColorStop(1, `hsla(${pattern.particles[0].hue}, 100%, 50%, 0)`);
+
+                    ctx.beginPath();
+                    ctx.arc(pattern.x, pattern.y, glowRadius * 3, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(render);
+            }
+
+            // Start rendering
+            render();
+
+            // Create background particles
+            setInterval(createBackgroundParticles, 3000);
+
+            // Add initial patterns
+            setTimeout(() => {
+                addPattern("whispers fade");
+                addPattern("light becomes memory");
+                addPattern("patterns emerge");
+                addPattern("then dissolve");
+            }, 1000);
+
+            // Create initial ambient lights
+            for (let i = 0; i < 3; i++) {
+                setTimeout(createAmbientLight, i * 5000);
+            }
+        });
+    </script>
+</body>
+</html>

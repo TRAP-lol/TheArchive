@@ -1,4 +1,4 @@
 .vscode
 /whispers/
 /glass/gen/hash/
-.env
+/scripts/artifact-processor/logs/
